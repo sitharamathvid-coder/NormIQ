@@ -149,10 +149,9 @@ with tab2:
         eval_btn = st.button("🚀 Run Cloud Evaluation", use_container_width=True)
         
     if eval_btn:
-        with st.spinner("Running deep RAGAS evaluation. This may take a few minutes..."):
+        with st.spinner(f"Running deep RAGAS evaluation on {num_q} questions. This may take a few minutes..."):
             try:
-                # Actually, our API takes no parameters for run_evaluation currently, but we can pass num_q in the future.
-                res = requests.post(f"{API_URL}/evaluate")
+                res = requests.post(f"{API_URL}/evaluate?limit={num_q}")
                 if res.status_code == 200:
                     eval_data = res.json()
                     st.success("Evaluation Completed Successfully!")
@@ -190,8 +189,8 @@ with tab2:
         with col5: st.markdown(f'<div class="stat-card" style="border-color: white;"><div class="stat-label">Overall</div><div class="stat-value" style="color: {get_color(overall)}">{overall:.3f}</div></div>', unsafe_allow_html=True)
         
         st.markdown("<br><h4>Ablation Study Matrix (Results)</h4>", unsafe_allow_html=True)
-        if "results" in e_data:
-            df_ab = pd.DataFrame(e_data["results"])
+        if "detailed_results" in e_data:
+            df_ab = pd.DataFrame(e_data["detailed_results"])
             st.dataframe(df_ab, use_container_width=True)
             
             json_str = json.dumps(e_data, indent=2)

@@ -18,13 +18,16 @@ from rag_pipeline import NormIQRAGPipeline
 # Disable parallel tokenizers warning
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-async def generate_answers():
+async def generate_answers(limit=None):
     print("Initializing RAG Pipeline for Evaluation...")
     pipeline = NormIQRAGPipeline()
     
     print("Loading test dataset...")
     with open("data/test_qa_pairs.json", "r", encoding="utf-8") as f:
         qa_pairs = json.load(f)
+        
+    if limit is not None:
+        qa_pairs = qa_pairs[:int(limit)]
         
     data_samples = {
         "question": [],
@@ -135,8 +138,13 @@ def run_ragas_evaluation(data_samples):
     print("\\nResults saved to data/ragas_baseline_results.json")
 
 if __name__ == "__main__":
+    import sys
+    limit = None
+    if len(sys.argv) > 1:
+        limit = int(sys.argv[1])
+        
     # 1. Generate answers asynchronously
-    samples = asyncio.run(generate_answers())
+    samples = asyncio.run(generate_answers(limit))
     
     # 2. Run Ragas synchronously to prevent thread crashes
     run_ragas_evaluation(samples)

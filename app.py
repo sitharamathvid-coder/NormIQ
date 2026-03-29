@@ -1,5 +1,7 @@
 import os
+import sys
 import shutil
+import traceback
 import json
 import asyncio
 from datetime import date
@@ -129,13 +131,14 @@ def fetch_audit_logs(db: Session = Depends(get_db)):
         })
     return {"logs": results}
 
+import subprocess
+
 @app.post("/evaluate")
-async def run_evaluation():
-    """Triggers the asynchronous Ragas Evaluation script."""
-    # Run securely in a separate subprocess to avoid blocking the API loop
+def run_evaluation(limit: int = 30):
+    """Triggers the Ragas Evaluation script with an optional limit."""
     try:
-        process = await asyncio.create_subprocess_shell("python run_evaluation.py")
-        await process.wait()
+        # Run securely via subprocess. FastAPI automatically executes 'def' routes in a threadpool, preventing blocking.
+        subprocess.run([sys.executable, "run_evaluation.py", str(limit)], check=True)
         
         # Load the newly outputted stats
         results_file = os.path.join("data", "ragas_baseline_results.json")
@@ -144,8 +147,11 @@ async def run_evaluation():
                 return json.load(f)
         else:
             raise Exception("No evaluation results were spawned.")
+    except subprocess.CalledProcessError as e:
+        raise HTTPException(status_code=500, detail=f"Ragas evaluation script crashed with exit code {e.returncode}")
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Eval crashed: {str(e)}")
+        err_msg = traceback.format_exc()
+        raise HTTPException(status_code=500, detail=f"Eval crashed: {err_msg}")
 
 
 if __name__ == "__main__":
