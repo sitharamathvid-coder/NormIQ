@@ -1,0 +1,40 @@
+# PDF parsing
+llama-parse
+
+# Core RAG
+langchain
+langchain-community
+langchain-openai
+langgraph
+
+# Vector + retrieval
+pinecone-client
+rank-bm25
+
+# Reranking
+cohere
+
+# Embeddings
+tiktoken
+
+# Evaluation
+ragas
+datasets
+
+# API + UI
+fastapi
+uvicorn
+streamlit
+
+# Monitoring
+langfuse
+
+# Utils
+python-dotenv
+openai
+pypdf
+pandas
+
+# MCP
+mcp
+fastmcp

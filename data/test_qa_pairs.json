@@ -1,0 +1,182 @@
+[
+  {
+    "question": "Is the use of encryption mandatory under the HIPAA Security Rule?",
+    "answer": "No. Under 45 CFR 164.312(a)(2)(iv) and 164.312(e)(2)(ii), encryption is an addressable implementation specification, not a required one. A covered entity must implement encryption if a risk assessment determines it is reasonable and appropriate, or document why it is not and implement an equivalent alternative measure.",
+    "regulation": "HIPAA",
+    "citation": "45 CFR 164.312(a)(2)(iv), 45 CFR 164.312(e)(2)(ii)"
+  },
+  {
+    "question": "Are we required to certify our organization's compliance with the HIPAA Security Rule?",
+    "answer": "No. Under 45 CFR 164.308(a)(8), covered entities must perform periodic technical and non-technical evaluations of their security policies and procedures. HHS does not recognize private certifications and such certifications do not absolve covered entities of their legal obligations under the Security Rule.",
+    "regulation": "HIPAA",
+    "citation": "45 CFR 164.308(a)(8)"
+  },
+  {
+    "question": "When did covered entities have to comply with the HIPAA Privacy Rule standards?",
+    "answer": "Most covered entities were required to comply with the HIPAA Privacy Rule by April 14, 2003, as required by Congress. Small health plans had an additional year and were required to comply by April 14, 2004.",
+    "regulation": "HIPAA",
+    "citation": "45 CFR 164.500"
+  },
+  {
+    "question": "May mental health practitioners provide group therapy where other patients are present without violating HIPAA?",
+    "answer": "Yes. Disclosures of protected health information in a group therapy setting are treatment disclosures and may be made without individual authorization. The HIPAA Privacy Rule also generally permits disclosure to a family member involved in the individual's care when the individual does not object.",
+    "regulation": "HIPAA",
+    "citation": "45 CFR 164.506, 45 CFR 164.510"
+  },
+  {
+    "question": "Does the HIPAA Privacy Rule prohibit disclosing an entire medical record?",
+    "answer": "No. The Privacy Rule does not prohibit use or disclosure of an entire medical record. A covered entity may do so without case-by-case justification if it has documented in its policies and procedures that the entire record is the minimum necessary for certain identified purposes under 45 CFR 164.502(b).",
+    "regulation": "HIPAA",
+    "citation": "45 CFR 164.502(b)"
+  },
+  {
+    "question": "Does the minimum necessary standard prevent sharing health information for workers compensation claims?",
+    "answer": "No. For disclosures made for workers compensation purposes under 45 CFR 164.512(l), the minimum necessary standard permits covered entities to disclose information to the full extent authorized by State or other law. The minimum necessary standard does not apply to disclosures required by law.",
+    "regulation": "HIPAA",
+    "citation": "45 CFR 164.512(l), 45 CFR 164.514(d)(3)"
+  },
+  {
+    "question": "Can the personal representative of an adult patient access their medical records under HIPAA?",
+    "answer": "Yes. Under 45 CFR 164.524, the HIPAA Privacy Rule treats a personal representative as the individual for purposes of the right of access. However, a covered entity may deny access to a personal representative if it reasonably believes the individual has been subject to domestic violence or abuse by that representative.",
+    "regulation": "HIPAA",
+    "citation": "45 CFR 164.524"
+  },
+  {
+    "question": "Is a covered entity liable for the actions of its business associates under HIPAA?",
+    "answer": "No. Under 45 CFR 164.504(e)(1), covered entities are not required to monitor business associates or liable for their actions. However, if a covered entity discovers a material breach of the business associate contract, it must take reasonable steps to cure the breach or terminate the contract and report to HHS OCR if termination is not feasible.",
+    "regulation": "HIPAA",
+    "citation": "45 CFR 164.504(e)(1)"
+  },
+  {
+    "question": "Can we use patient data for research purposes after it has been collected for treatment?",
+    "answer": "Yes, further processing of patient data for archiving purposes in the public interest, scientific or historical research purposes, or statistical purposes is not considered incompatible with the initial purposes, as long as it adheres to the conditions outlined in Article 89(1).",
+    "regulation": "GDPR",
+    "citation": "GDPR Article 5"
+  },
+  {
+    "question": "Can we process a patient's personal data without their consent if it's necessary for their treatment?",
+    "answer": "Yes, processing is lawful if it is necessary for the performance of a contract, such as providing healthcare services to the patient. This means that if the processing is essential for their treatment, consent is not required.",
+    "regulation": "GDPR",
+    "citation": "GDPR Article 6"
+  },
+  {
+    "question": "How can we prove that a patient has consented to the processing of their personal data?",
+    "answer": "The controller must be able to demonstrate that the data subject has consented to the processing of their personal data. This means we need to have clear records or evidence of the consent given by the patient.",
+    "regulation": "GDPR",
+    "citation": "GDPR Article 7"
+  },
+  {
+    "question": "Can I process a patient's data regarding their sexual orientation as part of their health records?",
+    "answer": "No, processing data concerning a natural person’s sexual orientation is prohibited under GDPR Article 9, as it falls under the special categories of personal data that require strict conditions for processing.",
+    "regulation": "GDPR",
+    "citation": "GDPR Article 9"
+  },
+  {
+    "question": "What information do I need to provide to patients when collecting their personal data?",
+    "answer": "You must provide patients with your identity and contact details as the data controller, the contact details of the data protection officer if applicable, the purposes of processing their personal data, and the legal basis for that processing.",
+    "regulation": "GDPR",
+    "citation": "GDPR Article 13"
+  },
+  {
+    "question": "What should I do if a patient requests that we delete their personal data from our records?",
+    "answer": "You must erase the patient's personal data without undue delay if it is no longer necessary for the purposes for which it was collected, or if the patient withdraws their consent and there is no other legal ground for processing their data.",
+    "regulation": "GDPR",
+    "citation": "GDPR Article 17"
+  },
+  {
+    "question": "What measures should we implement to ensure data protection during patient data processing?",
+    "answer": "You should implement appropriate technical and organisational measures, such as pseudonymisation, that are designed to effectively apply data-protection principles like data minimisation. This should be done both when determining the means for processing and during the actual processing of the data.",
+    "regulation": "GDPR",
+    "citation": "GDPR Article 25"
+  },
+  {
+    "question": "What measures should we implement to ensure the security of personal data we process in our healthcare facility?",
+    "answer": "You should implement appropriate technical and organisational measures that consider the state of the art, costs, and the risks involved. This includes measures such as pseudonymisation, encryption, and ensuring the ongoing confidentiality, integrity, availability, and resilience of your processing systems and services.",
+    "regulation": "GDPR",
+    "citation": "GDPR Article 32"
+  },
+  {
+    "question": "What key elements should our access control policy include to ensure compliance and effectiveness?",
+    "answer": "The access control policy should address the purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance. Additionally, it must be consistent with applicable laws, regulations, and guidelines, and include procedures to facilitate the implementation of the policy and associated access controls.",
+    "regulation": "NIST",
+    "citation": "NIST AC-1"
+  },
+  {
+    "question": "What steps should we take to ensure that only authorized users have access to our hospital's system accounts?",
+    "answer": "To ensure that only authorized users have access, you should define and document the types of accounts allowed, assign account managers, and specify the authorized users, group and role membership, and access authorizations for each account. Additionally, require approvals for account creation requests to maintain control over who can access the system.",
+    "regulation": "NIST",
+    "citation": "NIST AC-2"
+  },
+  {
+    "question": "What types of events should we log to ensure compliance with NIST AU-2 in our hospital's information systems?",
+    "answer": "You should identify the types of events that your system is capable of logging and coordinate with other organizational entities to determine the selection criteria for these events. Additionally, you need to specify the event types for logging and provide a rationale for their adequacy in supporting the audit function.",
+    "regulation": "NIST",
+    "citation": "NIST AU-2"
+  },
+  {
+    "question": "How can we ensure that all hospital staff are uniquely identified and authenticated when accessing patient records?",
+    "answer": "To ensure that all hospital staff are uniquely identified and authenticated, we must implement a system that assigns a unique identification to each user. This identification should be linked to the processes they perform on behalf of the organization, ensuring accountability and traceability in accessing sensitive information.",
+    "regulation": "NIST",
+    "citation": "NIST IA-2"
+  },
+  {
+    "question": "What is the timeframe for reporting suspected incidents to our incident response capability?",
+    "answer": "The timeframe for reporting suspected incidents is defined by the organization and should be specified in the [ORG-DEFINED VALUE]. It is important to ensure that personnel are aware of this timeframe to facilitate timely incident response.",
+    "regulation": "NIST",
+    "citation": "NIST IR-6"
+  },
+  {
+    "question": "What specific sanitization methods should we use for media that contains sensitive patient information before disposal?",
+    "answer": "You should sanitize the media prior to disposal, release out of organizational control, or release for reuse using methods defined by your organization. Additionally, ensure that the sanitization mechanisms employed have the strength and integrity appropriate for the security category or classification of the information.",
+    "regulation": "NIST",
+    "citation": "NIST MP-6"
+  },
+  {
+    "question": "How do we identify the specific threats and vulnerabilities to our hospital's information systems as part of the risk assessment process?",
+    "answer": "To identify threats and vulnerabilities, we need to systematically evaluate our systems to pinpoint potential risks that could lead to unauthorized access, use, or disclosure of sensitive information. This involves analyzing the system's architecture, reviewing past incidents, and assessing the security controls in place to determine areas of weakness.",
+    "regulation": "NIST",
+    "citation": "NIST RA-3"
+  },
+  {
+    "question": "What measures should we implement to ensure the confidentiality and integrity of patient data during transmission?",
+    "answer": "To protect the confidentiality and integrity of transmitted information, we should implement encryption protocols and secure communication channels. This will help safeguard sensitive patient data from unauthorized access and tampering during transmission.",
+    "regulation": "NIST",
+    "citation": "NIST SC-8"
+  },
+  {
+    "question": "How does the breach notification deadline differ between HIPAA and GDPR?",
+    "answer": "HIPAA requires notification to affected individuals within 60 days of discovering a breach under 45 CFR 164.404. GDPR is significantly stricter, requiring notification to the supervisory authority within 72 hours under Article 33. Organizations operating under both must apply the stricter GDPR deadline.",
+    "regulation": "Cross-Regulation",
+    "citation": "HIPAA 45 CFR 164.404, GDPR Article 33"
+  },
+  {
+    "question": "Does a patient have the right to demand deletion of their health records under HIPAA and GDPR?",
+    "answer": "Under GDPR Article 17, individuals have the right to erasure of their personal data under certain conditions. HIPAA does not grant an equivalent right — covered entities must retain records for six years under 45 CFR 164.530(j). In cross-border situations, GDPR's right to erasure takes precedence where applicable.",
+    "regulation": "Cross-Regulation",
+    "citation": "GDPR Article 17, HIPAA 45 CFR 164.530(j)"
+  },
+  {
+    "question": "Which regulation has stricter requirements for consent to process health data?",
+    "answer": "GDPR Article 9 requires explicit consent for processing special categories of data including health data, with very limited exceptions. HIPAA under 45 CFR 164.502 permits certain uses and disclosures without consent for treatment, payment, and operations. GDPR is the stricter standard and should be applied for EU data subjects.",
+    "regulation": "Cross-Regulation",
+    "citation": "GDPR Article 9, HIPAA 45 CFR 164.502"
+  },
+  {
+    "question": "Is a Data Protection Officer required under both HIPAA and GDPR?",
+    "answer": "GDPR Article 37 mandates appointment of a Data Protection Officer for organizations that process health data on a large scale. HIPAA has no equivalent requirement for a DPO, but does require a designated Privacy Official under 45 CFR 164.530(a). Organizations subject to both must appoint a DPO to satisfy GDPR.",
+    "regulation": "Cross-Regulation",
+    "citation": "GDPR Article 37, HIPAA 45 CFR 164.530(a)"
+  },
+  {
+    "question": "How do HIPAA and NIST SP 800-53 work together for healthcare security compliance?",
+    "answer": "HIPAA Security Rule under 45 CFR 164.308 requires covered entities to implement administrative safeguards but does not specify exact technical controls. NIST SP 800-53 AC-1 and SC-28 provide the detailed technical control framework that healthcare organizations can use to satisfy HIPAA's security requirements. Implementing NIST controls is a recognized method to demonstrate HIPAA compliance.",
+    "regulation": "Cross-Regulation",
+    "citation": "HIPAA 45 CFR 164.308, NIST AC-1, NIST SC-28"
+  },
+  {
+    "question": "What are the maximum financial penalties under HIPAA compared to GDPR?",
+    "answer": "HIPAA penalties under 45 CFR 160.404 can reach up to $1.9 million per violation category per year. GDPR Article 83 allows fines of up to 20 million euros or 4 percent of global annual turnover, whichever is higher. For large organizations, GDPR penalties are substantially higher than HIPAA.",
+    "regulation": "Cross-Regulation",
+    "citation": "HIPAA 45 CFR 160.404, GDPR Article 83"
+  }
+]
