@@ -494,27 +494,65 @@ if __name__ == "__main__":
 # =============================================================================
 # END OF STEP 1
 # =============================================================================
-# Expected output when you run: python ingest_step1_hipaa.py
-#
-#   ✅ All API keys loaded.
-#   ✅ Configuration loaded.
-#   --- Citation Regex Test ---  (all ✅)
-#   --- Section Title Test ---   (all ✅)
-#   📄 Loading: data/hipaa_part164_ecfr.pdf
-#      ✅ Parsed. Total characters: 245,377
-#      ✅ Split into 481 chunks.
-#      ✅ 481 chunks with metadata added.
-#   ✅ HIPAA TOTAL: 481 chunks from 1 file.
-#      Real citations:   ~300  (~62%)
-#      Pending:          ~181  (~38%)   ← definitions section, acceptable
-#   (5 sample chunks printed)
-#   Do the sample chunks look correct? Type 'yes' to upload to Pinecone: yes
-#   ✅ BM25 HIPAA retriever built and saved to bm25_hipaa.pkl
-#   Uploaded batch: 0–99   (100/481 total)
-#   Uploaded batch: 100–199 (200/481 total)
-#   Uploaded batch: 200–299 (300/481 total)
-#   Uploaded batch: 300–399 (400/481 total)
-#   Uploaded batch: 400–480 (481/481 total)
-#   ✅ HIPAA upload complete: 481 chunks in namespace 'HIPAA'
-#   ✅ STEP 1 COMPLETE
+
 # =============================================================================
+# API ENDPOINT INJECTION (DO NOT RUN VIA CLI)
+# =============================================================================
+
+def process_and_upload_dynamic(file_path: str) -> int:
+    """
+    Entry point for dynamic file uploads triggered by app.py / Streamlit.
+    """
+    print(f"\\n=== Starting Dynamic Ingestion for {file_path} ===")
+    
+    # 1. Override the global file list so load_hipaa_chunks() processes only the upload
+    global HIPAA_FILES
+    
+    HIPAA_FILES = [{
+        "path":           file_path,
+        "section_type":   "Dynamic Admin Upload",
+        "version":        "Admin-v1",
+        "effective_date": "Current",
+        "source_url":     "UI Upload",
+    }]
+    
+    # 2. Parse and Chunk
+    new_chunks = load_hipaa_chunks()
+    
+    if not new_chunks:
+        return 0
+
+    # 3. Append to existing BM25 Pickle instead of overwriting
+    print("Appending new chunks to existing BM25 index...")
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    bm25_path = os.path.join(BASE_DIR, "data", "bm25_hipaa.pkl")
+    
+    existing_corpus = []
+    if os.path.exists(bm25_path):
+        import pickle
+        with open(bm25_path, "rb") as f:
+            try:
+                _ = pickle.load(f)
+                existing_corpus = pickle.load(f)
+            except EOFError:
+                pass
+                
+    combined_corpus = existing_corpus + [c["text"] for c in new_chunks]
+    
+    from rank_bm25 import BM25Okapi
+    tokenized_corpus = [text.lower().split() for text in combined_corpus]
+    bm25 = BM25Okapi(tokenized_corpus)
+    
+    import pickle
+    with open(bm25_path, "wb") as f:
+        pickle.dump(bm25, f)
+        pickle.dump(combined_corpus, f)
+        
+    print(f"BM25 appended successfully. New total corpus size: {len(combined_corpus)}")
+
+    # 4. Upsert to Pinecone
+    count = upload_to_pinecone_hipaa(new_chunks)
+    
+    print(f"\\n=== Dynamic Ingestion Complete! Added {count} chunks ===")
+    return count
+

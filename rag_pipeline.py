@@ -3,8 +3,11 @@ import json
 import asyncio
 import pickle
 import hashlib
+import time
 import numpy as np
 from dotenv import load_dotenv
+
+from database import SessionLocal, AuditLog
 
 # Optional Langfuse tracing, as seen in .env (Disabled due to missing keys)
 # from langfuse.openai import openai
@@ -127,6 +130,7 @@ class NormIQRAGPipeline:
 
     async def query(self, user_question: str) -> Dict[str, Any]:
         """Runs the fully parallelized hybrid RAG pipeline."""
+        start_time = time.time()
         
         # ---------------------------------------------------------
         # 0. Check MD5 Cache
@@ -136,14 +140,20 @@ class NormIQRAGPipeline:
         if os.path.exists(self.cache_file):
             with open(self.cache_file, 'r', encoding='utf-8') as f:
                 try:
-                    self.cache_data = json.load(f)
-                    if question_hash in self.cache_data:
-                        print(f"⚡ Using Cached Response for MD5: {question_hash}")
-                        return self.cache_data[question_hash]
+                     self.cache_data = json.load(f)
+                     if question_hash in self.cache_data:
+                         print(f"⚡ Using Cached Response for MD5: {question_hash}")
+                         cached_res = self.cache_data[question_hash]
+                         cached_res["from_cache"] = True
+                         cached_res["process_time_sec"] = round(time.time() - start_time, 2)
+                         
+                         # Log the cached hit to DB
+                         self._log_to_db(user_question, cached_res)
+                         return cached_res
                 except Exception:
-                    self.cache_data = {}
+                     self.cache_data = {}
         else:
-            self.cache_data = {}
+             self.cache_data = {}
 
         # ---------------------------------------------------------
         # 1. Asynchronous Hybrid Search (6 Parallel Tasks)
@@ -286,24 +296,56 @@ Extract the EXACT string listed under [Citation: ...] to cite your answer.
         # ---------------------------------------------------------
         # 5. Output Formatting
         # ---------------------------------------------------------
+        process_time = round(time.time() - start_time, 2)
+        
         final_response = {
             "answer": llm_response.answer,
             "citations": llm_response.citations,
             "confidence": round(confidence_score, 4),
             "regulation": llm_response.regulation,
             "threshold_status": "AUTO_APPROVED" if confidence_score >= 0.80 else "HUMAN_REVIEW_QUEUE",
+            "from_cache": False,
+            "process_time_sec": process_time,
             "contexts": [doc.page_content for doc in reranked_docs]
         }
         
-        # --- Save to Cache ---
-        self.cache_data[question_hash] = final_response
+        # --- Save to Cache (DO NOT save from_cache or time as True in the base file so it resets) ---
+        cache_copy = dict(final_response)
+        cache_copy.pop("from_cache", None)
+        cache_copy.pop("process_time_sec", None)
+        self.cache_data[question_hash] = cache_copy
+        
         try:
             with open(self.cache_file, 'w', encoding='utf-8') as f:
                 json.dump(self.cache_data, f, indent=2)
         except Exception as e:
             print(f"Warning: Failed to save cache: {e}")
             
+        # Log fresh query to DB
+        self._log_to_db(user_question, final_response)
+            
         return final_response
+        
+    def _log_to_db(self, question: str, response: Dict[str, Any]):
+        """Persists the query and result metadata to PostgreSQL/SQLite."""
+        try:
+            # We open a scoped session to save the log record safely
+            db = SessionLocal()
+            log_entry = AuditLog(
+                question=question,
+                answer=response.get("answer", ""),
+                regulation=response.get("regulation", "N/A"),
+                confidence=response.get("confidence", 0.0),
+                status=response.get("threshold_status", "UNKNOWN"),
+                process_time_sec=response.get("process_time_sec", 0.0),
+                from_cache=response.get("from_cache", False),
+                citations=json.dumps(response.get("citations", []))
+            )
+            db.add(log_entry)
+            db.commit()
+            db.close()
+        except Exception as e:
+            print(f"Failed to log audit data to database: {e}")
         
     def _build_failure_response(self, message: str) -> Dict[str, Any]:
         return {
