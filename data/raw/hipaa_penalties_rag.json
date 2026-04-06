@@ -1,0 +1,343 @@
+[
+  {
+    "control_id": "160.400",
+    "title": "Applicability of Penalties",
+    "control_family": "HIPAA Civil Money Penalties",
+    "chunk_id": "160.400_1",
+    "text": "Reasonable cause means an act or omission in which a covered entity or business associate knew, or by exercising reasonable diligence would have known, that the act or omission violated an administrative simplification provision, but in which the covered entity or business associate did not act with willful neglect. Reasonable diligence means the business care and prudence expected from a person seeking to satisfy a legal requirement under similar circumstances. Willful neglect means conscious, intentional failure or reckless indifference to the obligation to comply with the administrative simplification provision violated.",
+    "embedding_text": "160.400 Applicability of Penalties. Reasonable cause means an act or omission in which a covered entity or business associate knew, or by exercising reasonable diligence would have known, that the act or omission violated an administrative simplification provision, but in which the covered entity or business associate did not act with willful neglect. Reasonable diligence means the business care and prudence expected from a person seeking to satisfy a legal requirement under similar circumstances. Willful neglect means conscious, intentional failure or reckless indifference to the obligation to comply with the administrative simplification provision violated.",
+    "regulation": "HIPAA",
+    "framework": "45 CFR Part 160",
+    "domain": "Civil Money Penalties",
+    "control_prefix": "160",
+    "hipaa_crosswalk": [],
+    "metadata": {
+      "citation": "45 CFR § 160.400",
+      "section": "160.400",
+      "section_title": "Applicability of Penalties",
+      "subpart": "Enforcement",
+      "keywords": ["reasonable cause", "willful neglect", "reasonable diligence", "penalty", "violation"]
+    }
+  },
+  {
+    "control_id": "160.402",
+    "title": "Basis for a Civil Money Penalty",
+    "control_family": "HIPAA Civil Money Penalties",
+    "chunk_id": "160.402_1",
+    "text": "General rule. Subject to 160.410, the Secretary will impose a civil money penalty upon a covered entity or business associate if the Secretary determines that the covered entity or business associate has violated an administrative simplification provision. If the Secretary determines that more than one covered entity or business associate was responsible for a violation, the Secretary will impose a civil money penalty against each such covered entity or business associate.",
+    "embedding_text": "160.402 Basis for a Civil Money Penalty. General rule. Subject to 160.410, the Secretary will impose a civil money penalty upon a covered entity or business associate if the Secretary determines that the covered entity or business associate has violated an administrative simplification provision. If the Secretary determines that more than one covered entity or business associate was responsible for a violation, the Secretary will impose a civil money penalty against each such covered entity or business associate.",
+    "regulation": "HIPAA",
+    "framework": "45 CFR Part 160",
+    "domain": "Civil Money Penalties",
+    "control_prefix": "160",
+    "hipaa_crosswalk": [],
+    "metadata": {
+      "citation": "45 CFR § 160.402",
+      "section": "160.402",
+      "section_title": "Basis for a Civil Money Penalty",
+      "subpart": "Enforcement",
+      "keywords": ["civil money penalty", "covered entity", "business associate", "violation", "Secretary", "liability"]
+    }
+  },
+  {
+    "control_id": "160.402",
+    "title": "Basis for a Civil Money Penalty",
+    "control_family": "HIPAA Civil Money Penalties",
+    "chunk_id": "160.402_2",
+    "text": "A covered entity is liable, in accordance with the Federal common law of agency, for a civil money penalty for a violation based on the act or omission of any agent of the covered entity, including a workforce member or business associate, acting within the scope of the agency. A business associate is liable, in accordance with the Federal common law of agency, for a civil money penalty for a violation based on the act or omission of any agent of the business associate, including a workforce member or subcontractor, acting within the scope of the agency.",
+    "embedding_text": "160.402 Basis for a Civil Money Penalty. A covered entity is liable, in accordance with the Federal common law of agency, for a civil money penalty for a violation based on the act or omission of any agent of the covered entity, including a workforce member or business associate, acting within the scope of the agency. A business associate is liable, in accordance with the Federal common law of agency, for a civil money penalty for a violation based on the act or omission of any agent of the business associate, including a workforce member or subcontractor, acting within the scope of the agency.",
+    "regulation": "HIPAA",
+    "framework": "45 CFR Part 160",
+    "domain": "Civil Money Penalties",
+    "control_prefix": "160",
+    "hipaa_crosswalk": [],
+    "metadata": {
+      "citation": "45 CFR § 160.402",
+      "section": "160.402",
+      "section_title": "Basis for a Civil Money Penalty",
+      "subpart": "Enforcement",
+      "keywords": ["liability", "agent", "workforce member", "subcontractor", "business associate", "federal common law"]
+    }
+  },
+  {
+    "control_id": "160.404",
+    "title": "Amount of a Civil Money Penalty",
+    "control_family": "HIPAA Civil Money Penalties",
+    "chunk_id": "160.404_1",
+    "text": "Violations occurring prior to February 18, 2009: The Secretary may not impose a civil money penalty in the amount of more than $100 for each violation, or in excess of $25,000 for identical violations during a calendar year.",
+    "embedding_text": "160.404 Amount of a Civil Money Penalty. Violations occurring prior to February 18, 2009: The Secretary may not impose a civil money penalty in the amount of more than $100 for each violation, or in excess of $25,000 for identical violations during a calendar year.",
+    "regulation": "HIPAA",
+    "framework": "45 CFR Part 160",
+    "domain": "Civil Money Penalties",
+    "control_prefix": "160",
+    "hipaa_crosswalk": [],
+    "metadata": {
+      "citation": "45 CFR § 160.404",
+      "section": "160.404",
+      "section_title": "Amount of a Civil Money Penalty",
+      "subpart": "Enforcement",
+      "penalty_tier": "Pre-2009",
+      "max_per_violation": "$100",
+      "max_per_year": "$25,000",
+      "keywords": ["penalty amount", "fine", "violation", "calendar year", "pre-2009"]
+    }
+  },
+  {
+    "control_id": "160.404",
+    "title": "Amount of a Civil Money Penalty",
+    "control_family": "HIPAA Civil Money Penalties",
+    "chunk_id": "160.404_2",
+    "text": "For violations occurring on or after February 18, 2009, where the covered entity or business associate did not know and by exercising reasonable diligence would not have known of the violation: minimum $100 and maximum $50,000 per violation, and not in excess of $1,500,000 for identical violations during a calendar year.",
+    "embedding_text": "160.404 Amount of a Civil Money Penalty. For violations occurring on or after February 18, 2009, where the covered entity or business associate did not know and by exercising reasonable diligence would not have known of the violation: minimum $100 and maximum $50,000 per violation, and not in excess of $1,500,000 for identical violations during a calendar year.",
+    "regulation": "HIPAA",
+    "framework": "45 CFR Part 160",
+    "domain": "Civil Money Penalties",
+    "control_prefix": "160",
+    "hipaa_crosswalk": [],
+    "metadata": {
+      "citation": "45 CFR § 160.404(b)(2)(i)",
+      "section": "160.404",
+      "section_title": "Amount of a Civil Money Penalty",
+      "subpart": "Enforcement",
+      "penalty_tier": "Did Not Know",
+      "min_per_violation": "$100",
+      "max_per_violation": "$50,000",
+      "max_per_year": "$1,500,000",
+      "keywords": ["did not know", "penalty", "fine", "$50,000", "$1,500,000", "reasonable diligence"]
+    }
+  },
+  {
+    "control_id": "160.404",
+    "title": "Amount of a Civil Money Penalty",
+    "control_family": "HIPAA Civil Money Penalties",
+    "chunk_id": "160.404_3",
+    "text": "For violations occurring on or after February 18, 2009, where the violation was due to reasonable cause and not to willful neglect: minimum $1,000 and maximum $50,000 per violation, and not in excess of $1,500,000 for identical violations during a calendar year.",
+    "embedding_text": "160.404 Amount of a Civil Money Penalty. For violations occurring on or after February 18, 2009, where the violation was due to reasonable cause and not to willful neglect: minimum $1,000 and maximum $50,000 per violation, and not in excess of $1,500,000 for identical violations during a calendar year.",
+    "regulation": "HIPAA",
+    "framework": "45 CFR Part 160",
+    "domain": "Civil Money Penalties",
+    "control_prefix": "160",
+    "hipaa_crosswalk": [],
+    "metadata": {
+      "citation": "45 CFR § 160.404(b)(2)(ii)",
+      "section": "160.404",
+      "section_title": "Amount of a Civil Money Penalty",
+      "subpart": "Enforcement",
+      "penalty_tier": "Reasonable Cause",
+      "min_per_violation": "$1,000",
+      "max_per_violation": "$50,000",
+      "max_per_year": "$1,500,000",
+      "keywords": ["reasonable cause", "not willful neglect", "$1,000", "$50,000", "$1,500,000", "penalty"]
+    }
+  },
+  {
+    "control_id": "160.404",
+    "title": "Amount of a Civil Money Penalty",
+    "control_family": "HIPAA Civil Money Penalties",
+    "chunk_id": "160.404_4",
+    "text": "For violations occurring on or after February 18, 2009, where the violation was due to willful neglect and was corrected during the 30-day period beginning on the first date the covered entity or business associate knew of the violation: minimum $10,000 and maximum $50,000 per violation, and not in excess of $1,500,000 for identical violations during a calendar year.",
+    "embedding_text": "160.404 Amount of a Civil Money Penalty. For violations occurring on or after February 18, 2009, where the violation was due to willful neglect and was corrected during the 30-day period beginning on the first date the covered entity or business associate knew of the violation: minimum $10,000 and maximum $50,000 per violation, and not in excess of $1,500,000 for identical violations during a calendar year.",
+    "regulation": "HIPAA",
+    "framework": "45 CFR Part 160",
+    "domain": "Civil Money Penalties",
+    "control_prefix": "160",
+    "hipaa_crosswalk": [],
+    "metadata": {
+      "citation": "45 CFR § 160.404(b)(2)(iii)",
+      "section": "160.404",
+      "section_title": "Amount of a Civil Money Penalty",
+      "subpart": "Enforcement",
+      "penalty_tier": "Willful Neglect Corrected",
+      "min_per_violation": "$10,000",
+      "max_per_violation": "$50,000",
+      "max_per_year": "$1,500,000",
+      "correction_window": "30 days",
+      "keywords": ["willful neglect", "corrected", "30 days", "$10,000", "$50,000", "$1,500,000"]
+    }
+  },
+  {
+    "control_id": "160.404",
+    "title": "Amount of a Civil Money Penalty",
+    "control_family": "HIPAA Civil Money Penalties",
+    "chunk_id": "160.404_5",
+    "text": "For violations occurring on or after February 18, 2009, where the violation was due to willful neglect and was NOT corrected during the 30-day period: minimum $50,000 per violation, and not in excess of $1,500,000 for identical violations during a calendar year. This is the highest penalty tier under HIPAA.",
+    "embedding_text": "160.404 Amount of a Civil Money Penalty. For violations occurring on or after February 18, 2009, where the violation was due to willful neglect and was NOT corrected during the 30-day period: minimum $50,000 per violation, and not in excess of $1,500,000 for identical violations during a calendar year. This is the highest penalty tier under HIPAA.",
+    "regulation": "HIPAA",
+    "framework": "45 CFR Part 160",
+    "domain": "Civil Money Penalties",
+    "control_prefix": "160",
+    "hipaa_crosswalk": [],
+    "metadata": {
+      "citation": "45 CFR § 160.404(b)(2)(iv)",
+      "section": "160.404",
+      "section_title": "Amount of a Civil Money Penalty",
+      "subpart": "Enforcement",
+      "penalty_tier": "Willful Neglect Not Corrected",
+      "min_per_violation": "$50,000",
+      "max_per_year": "$1,500,000",
+      "keywords": ["willful neglect", "not corrected", "$50,000", "$1,500,000", "highest penalty", "maximum fine"]
+    }
+  },
+  {
+    "control_id": "160.406",
+    "title": "Violations of an Identical Requirement",
+    "control_family": "HIPAA Civil Money Penalties",
+    "chunk_id": "160.406_1",
+    "text": "The Secretary will determine the number of violations of an administrative simplification provision based on the nature of the covered entity or business associate obligation to act or not act under the provision that is violated. In the case of continuing violation of a provision, a separate violation occurs each day the covered entity or business associate is in violation of the provision.",
+    "embedding_text": "160.406 Violations of an Identical Requirement. The Secretary will determine the number of violations of an administrative simplification provision based on the nature of the covered entity or business associate obligation to act or not act under the provision that is violated. In the case of continuing violation of a provision, a separate violation occurs each day the covered entity or business associate is in violation of the provision.",
+    "regulation": "HIPAA",
+    "framework": "45 CFR Part 160",
+    "domain": "Civil Money Penalties",
+    "control_prefix": "160",
+    "hipaa_crosswalk": [],
+    "metadata": {
+      "citation": "45 CFR § 160.406",
+      "section": "160.406",
+      "section_title": "Violations of an Identical Requirement",
+      "subpart": "Enforcement",
+      "keywords": ["continuing violation", "daily violation", "identical requirement", "number of violations"]
+    }
+  },
+  {
+    "control_id": "160.408",
+    "title": "Factors in Determining Penalty Amount",
+    "control_family": "HIPAA Civil Money Penalties",
+    "chunk_id": "160.408_1",
+    "text": "In determining the amount of any civil money penalty, the Secretary will consider the following factors which may be mitigating or aggravating: the nature and extent of the violation including the number of individuals affected and the time period during which the violation occurred; the nature and extent of the harm resulting from the violation including whether the violation caused physical harm, financial harm, harm to an individual reputation, or hindered an individual ability to obtain health care.",
+    "embedding_text": "160.408 Factors in Determining Penalty Amount. In determining the amount of any civil money penalty, the Secretary will consider the following factors which may be mitigating or aggravating: the nature and extent of the violation including the number of individuals affected and the time period during which the violation occurred; the nature and extent of the harm resulting from the violation including whether the violation caused physical harm, financial harm, harm to an individual reputation, or hindered an individual ability to obtain health care.",
+    "regulation": "HIPAA",
+    "framework": "45 CFR Part 160",
+    "domain": "Civil Money Penalties",
+    "control_prefix": "160",
+    "hipaa_crosswalk": [],
+    "metadata": {
+      "citation": "45 CFR § 160.408",
+      "section": "160.408",
+      "section_title": "Factors in Determining Penalty Amount",
+      "subpart": "Enforcement",
+      "keywords": ["mitigating", "aggravating", "harm", "individuals affected", "physical harm", "financial harm", "penalty factors"]
+    }
+  },
+  {
+    "control_id": "160.408",
+    "title": "Factors in Determining Penalty Amount",
+    "control_family": "HIPAA Civil Money Penalties",
+    "chunk_id": "160.408_2",
+    "text": "Additional factors considered in determining penalty amount include: the history of prior compliance with the administrative simplification provisions including whether the current violation is the same or similar to previous indications of noncompliance, whether the covered entity attempted to correct previous noncompliance, and how the covered entity responded to prior complaints. Also considered is the financial condition of the covered entity including whether financial difficulties affected ability to comply and whether the penalty would jeopardize ability to provide health care.",
+    "embedding_text": "160.408 Factors in Determining Penalty Amount. Additional factors considered in determining penalty amount include: the history of prior compliance with the administrative simplification provisions including whether the current violation is the same or similar to previous indications of noncompliance, whether the covered entity attempted to correct previous noncompliance, and how the covered entity responded to prior complaints. Also considered is the financial condition of the covered entity including whether financial difficulties affected ability to comply and whether the penalty would jeopardize ability to provide health care.",
+    "regulation": "HIPAA",
+    "framework": "45 CFR Part 160",
+    "domain": "Civil Money Penalties",
+    "control_prefix": "160",
+    "hipaa_crosswalk": [],
+    "metadata": {
+      "citation": "45 CFR § 160.408",
+      "section": "160.408",
+      "section_title": "Factors in Determining Penalty Amount",
+      "subpart": "Enforcement",
+      "keywords": ["prior compliance", "history", "financial condition", "noncompliance", "prior complaints", "penalty reduction"]
+    }
+  },
+  {
+    "control_id": "160.410",
+    "title": "Affirmative Defenses",
+    "control_family": "HIPAA Civil Money Penalties",
+    "chunk_id": "160.410_1",
+    "text": "The Secretary may not impose a civil money penalty on a covered entity or business associate for a violation if the covered entity or business associate establishes that the violation is not due to willful neglect and was corrected during either the 30-day period beginning on the first date the covered entity or business associate knew or by exercising reasonable diligence would have known that the violation occurred, or such additional period as the Secretary determines to be appropriate based on the nature and extent of the failure to comply.",
+    "embedding_text": "160.410 Affirmative Defenses. The Secretary may not impose a civil money penalty on a covered entity or business associate for a violation if the covered entity or business associate establishes that the violation is not due to willful neglect and was corrected during either the 30-day period beginning on the first date the covered entity or business associate knew or by exercising reasonable diligence would have known that the violation occurred, or such additional period as the Secretary determines to be appropriate based on the nature and extent of the failure to comply.",
+    "regulation": "HIPAA",
+    "framework": "45 CFR Part 160",
+    "domain": "Civil Money Penalties",
+    "control_prefix": "160",
+    "hipaa_crosswalk": [],
+    "metadata": {
+      "citation": "45 CFR § 160.410",
+      "section": "160.410",
+      "section_title": "Affirmative Defenses",
+      "subpart": "Enforcement",
+      "keywords": ["affirmative defense", "no penalty", "corrected", "30 days", "not willful neglect", "defense"]
+    }
+  },
+  {
+    "control_id": "160.412",
+    "title": "Waiver of Penalty",
+    "control_family": "HIPAA Civil Money Penalties",
+    "chunk_id": "160.412_1",
+    "text": "For violations that are not corrected within the period specified under affirmative defenses, the Secretary may waive the civil money penalty in whole or in part to the extent that the payment of the penalty would be excessive relative to the violation.",
+    "embedding_text": "160.412 Waiver of Penalty. For violations that are not corrected within the period specified under affirmative defenses, the Secretary may waive the civil money penalty in whole or in part to the extent that the payment of the penalty would be excessive relative to the violation.",
+    "regulation": "HIPAA",
+    "framework": "45 CFR Part 160",
+    "domain": "Civil Money Penalties",
+    "control_prefix": "160",
+    "hipaa_crosswalk": [],
+    "metadata": {
+      "citation": "45 CFR § 160.412",
+      "section": "160.412",
+      "section_title": "Waiver of Penalty",
+      "subpart": "Enforcement",
+      "keywords": ["waiver", "penalty waiver", "excessive penalty", "Secretary discretion"]
+    }
+  },
+  {
+    "control_id": "160.414",
+    "title": "Limitations on Penalty Actions",
+    "control_family": "HIPAA Civil Money Penalties",
+    "chunk_id": "160.414_1",
+    "text": "No action under this subpart may be entertained unless commenced by the Secretary within 6 years from the date of the occurrence of the violation. This is the statute of limitations for HIPAA civil money penalty enforcement actions.",
+    "embedding_text": "160.414 Limitations on Penalty Actions. No action under this subpart may be entertained unless commenced by the Secretary within 6 years from the date of the occurrence of the violation. This is the statute of limitations for HIPAA civil money penalty enforcement actions.",
+    "regulation": "HIPAA",
+    "framework": "45 CFR Part 160",
+    "domain": "Civil Money Penalties",
+    "control_prefix": "160",
+    "hipaa_crosswalk": [],
+    "metadata": {
+      "citation": "45 CFR § 160.414",
+      "section": "160.414",
+      "section_title": "Limitations on Penalty Actions",
+      "subpart": "Enforcement",
+      "limitation_period": "6 years",
+      "keywords": ["statute of limitations", "6 years", "time limit", "enforcement action"]
+    }
+  },
+  {
+    "control_id": "160.420",
+    "title": "Notice of Proposed Determination",
+    "control_family": "HIPAA Civil Money Penalties",
+    "chunk_id": "160.420_1",
+    "text": "If a penalty is proposed, the Secretary must deliver or send by certified mail to the respondent written notice of intent to impose a penalty. This notice must include: reference to the statutory basis for the penalty, a description of the findings of fact regarding the violations, the reason why the violations subject the respondent to a penalty, the amount of the proposed penalty, any circumstances considered in determining the penalty amount, and instructions for responding including the respondent right to a hearing within 90 days.",
+    "embedding_text": "160.420 Notice of Proposed Determination. If a penalty is proposed, the Secretary must deliver or send by certified mail to the respondent written notice of intent to impose a penalty. This notice must include: reference to the statutory basis for the penalty, a description of the findings of fact regarding the violations, the reason why the violations subject the respondent to a penalty, the amount of the proposed penalty, any circumstances considered in determining the penalty amount, and instructions for responding including the respondent right to a hearing within 90 days.",
+    "regulation": "HIPAA",
+    "framework": "45 CFR Part 160",
+    "domain": "Civil Money Penalties",
+    "control_prefix": "160",
+    "hipaa_crosswalk": [],
+    "metadata": {
+      "citation": "45 CFR § 160.420",
+      "section": "160.420",
+      "section_title": "Notice of Proposed Determination",
+      "subpart": "Enforcement",
+      "hearing_deadline": "90 days",
+      "keywords": ["notice", "proposed penalty", "certified mail", "hearing", "90 days", "right to appeal"]
+    }
+  },
+  {
+    "control_id": "PENALTY_SUMMARY",
+    "title": "HIPAA Penalty Tiers Summary",
+    "control_family": "HIPAA Civil Money Penalties",
+    "chunk_id": "PENALTY_SUMMARY_1",
+    "text": "HIPAA Civil Money Penalty Tiers (post February 18, 2009): Tier 1 Did Not Know: $100 to $50,000 per violation, max $1,500,000 per year. Tier 2 Reasonable Cause: $1,000 to $50,000 per violation, max $1,500,000 per year. Tier 3 Willful Neglect Corrected within 30 days: $10,000 to $50,000 per violation, max $1,500,000 per year. Tier 4 Willful Neglect Not Corrected: minimum $50,000 per violation, max $1,500,000 per year. Pre-2009 violations: max $100 per violation, max $25,000 per year.",
+    "embedding_text": "HIPAA Penalty Tiers Summary. HIPAA Civil Money Penalty Tiers (post February 18, 2009): Tier 1 Did Not Know: $100 to $50,000 per violation, max $1,500,000 per year. Tier 2 Reasonable Cause: $1,000 to $50,000 per violation, max $1,500,000 per year. Tier 3 Willful Neglect Corrected within 30 days: $10,000 to $50,000 per violation, max $1,500,000 per year. Tier 4 Willful Neglect Not Corrected: minimum $50,000 per violation, max $1,500,000 per year. Pre-2009 violations: max $100 per violation, max $25,000 per year.",
+    "regulation": "HIPAA",
+    "framework": "45 CFR Part 160",
+    "domain": "Civil Money Penalties",
+    "control_prefix": "160",
+    "hipaa_crosswalk": [],
+    "metadata": {
+      "citation": "45 CFR § 160.404",
+      "section": "160.404",
+      "section_title": "HIPAA Penalty Tiers Summary",
+      "subpart": "Enforcement",
+      "keywords": ["penalty tiers", "fine amounts", "tier 1", "tier 2", "tier 3", "tier 4", "willful neglect", "reasonable cause", "did not know", "$1,500,000", "$50,000"]
+    }
+  }
+]

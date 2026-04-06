@@ -1,0 +1,405 @@
+{
+  "framework_mapping": {
+    "source_regulation": "HIPAA Security Rule",
+    "target_framework": "NIST SP 800-53 Rev.5",
+    "reference_document": "NIST SP 800-66r2 Appendix D — February 2024",
+    "version": "1.0",
+    "mappings": [
+
+      {
+        "hipaa_section": "164.308(a)(1)",
+        "hipaa_section_normalized": "164.308(a)(1)",
+        "title": "Security Management Process",
+        "hipaa_category": "Administrative Safeguards",
+        "sub_clauses": [
+          "(i) Risk Analysis",
+          "(ii) Risk Management",
+          "(iii) Sanction Policy",
+          "(iv) Information System Activity Review"
+        ],
+        "nist_controls": ["RA-2", "RA-3", "RA-5", "PM-9", "CA-5", "SI-2"],
+        "keywords": ["risk analysis", "risk management", "risk assessment", "sanction policy", "security violations"],
+        "implementation": [
+          "Conduct regular risk assessments of ePHI",
+          "Maintain risk register and mitigation strategies",
+          "Apply sanctions for policy violations",
+          "Review information system activity logs"
+        ]
+      },
+
+      {
+        "hipaa_section": "164.308(a)(2)",
+        "hipaa_section_normalized": "164.308(a)(2)",
+        "title": "Assigned Security Responsibility",
+        "hipaa_category": "Administrative Safeguards",
+        "sub_clauses": [
+          "(i) Identify security official responsible for policies and procedures"
+        ],
+        "nist_controls": ["PM-2"],
+        "keywords": ["security officer", "HIPAA security official", "responsibility", "accountability"],
+        "implementation": [
+          "Assign a named HIPAA security officer",
+          "Document responsibilities formally"
+        ]
+      },
+
+      {
+        "hipaa_section": "164.308(a)(3)",
+        "hipaa_section_normalized": "164.308(a)(3)",
+        "title": "Workforce Security",
+        "hipaa_category": "Administrative Safeguards",
+        "sub_clauses": [
+          "(i) Authorization and Supervision",
+          "(ii) Workforce Clearance Procedure",
+          "(iii) Termination Procedures"
+        ],
+        "nist_controls": ["AC-2", "PS-2", "PS-3", "PS-4", "PS-5"],
+        "keywords": ["workforce", "employee access", "termination", "clearance", "onboarding", "offboarding"],
+        "implementation": [
+          "Define access levels per role",
+          "Conduct background checks",
+          "Revoke access immediately on termination",
+          "Review access on role change"
+        ]
+      },
+
+      {
+        "hipaa_section": "164.308(a)(4)",
+        "hipaa_section_normalized": "164.308(a)(4)",
+        "title": "Information Access Management",
+        "hipaa_category": "Administrative Safeguards",
+        "sub_clauses": [
+          "(i) Isolating Healthcare Clearinghouse Functions",
+          "(ii) Access Authorization",
+          "(iii) Access Establishment and Modification"
+        ],
+        "nist_controls": ["AC-1", "AC-2", "AC-3", "AC-5", "AC-6"],
+        "keywords": ["RBAC", "least privilege", "access control", "authorization", "minimum necessary"],
+        "implementation": [
+          "Implement role-based access control",
+          "Enforce least privilege principle",
+          "Review and update access rights periodically"
+        ]
+      },
+
+      {
+        "hipaa_section": "164.308(a)(5)",
+        "hipaa_section_normalized": "164.308(a)(5)",
+        "title": "Security Awareness and Training",
+        "hipaa_category": "Administrative Safeguards",
+        "sub_clauses": [
+          "(i) Security Reminders",
+          "(ii) Protection from Malicious Software",
+          "(iii) Log-in Monitoring",
+          "(iv) Password Management"
+        ],
+        "nist_controls": ["AT-2", "AT-3", "AT-4"],
+        "keywords": ["training", "awareness", "phishing", "malware", "password", "security reminders"],
+        "implementation": [
+          "Conduct annual security awareness training",
+          "Run phishing simulation exercises",
+          "Track training completion records",
+          "Train on password best practices"
+        ]
+      },
+
+      {
+        "hipaa_section": "164.308(a)(6)",
+        "hipaa_section_normalized": "164.308(a)(6)",
+        "title": "Security Incident Procedures",
+        "hipaa_category": "Administrative Safeguards",
+        "sub_clauses": [
+          "(i) Response and Reporting"
+        ],
+        "nist_controls": ["IR-4", "IR-5", "IR-6", "IR-8"],
+        "keywords": ["incident response", "security incident", "reporting", "breach", "response plan"],
+        "implementation": [
+          "Define and document incident response plan",
+          "Log all security incidents",
+          "Conduct post-incident reviews",
+          "Report incidents to appropriate parties"
+        ]
+      },
+
+      {
+        "hipaa_section": "164.308(a)(7)",
+        "hipaa_section_normalized": "164.308(a)(7)",
+        "title": "Contingency Plan",
+        "hipaa_category": "Administrative Safeguards",
+        "sub_clauses": [
+          "(i) Data Backup Plan",
+          "(ii) Disaster Recovery Plan",
+          "(iii) Emergency Mode Operation Plan",
+          "(iv) Testing and Revision Procedures",
+          "(v) Applications and Data Criticality Analysis"
+        ],
+        "nist_controls": ["CP-2", "CP-4", "CP-6", "CP-9", "CP-10"],
+        "keywords": ["backup", "disaster recovery", "contingency", "business continuity", "emergency", "restore"],
+        "implementation": [
+          "Create and test data backup procedures",
+          "Develop and test disaster recovery plan",
+          "Define emergency mode operations",
+          "Classify applications by criticality"
+        ]
+      },
+
+      {
+        "hipaa_section": "164.308(a)(8)",
+        "hipaa_section_normalized": "164.308(a)(8)",
+        "title": "Evaluation",
+        "hipaa_category": "Administrative Safeguards",
+        "sub_clauses": [
+          "(i) Perform periodic technical and non-technical evaluations"
+        ],
+        "nist_controls": ["CA-2", "CA-7", "CA-8"],
+        "keywords": ["audit", "evaluation", "assessment", "periodic review", "compliance evaluation"],
+        "implementation": [
+          "Conduct periodic security assessments",
+          "Implement continuous monitoring",
+          "Document evaluation results"
+        ]
+      },
+
+      {
+        "hipaa_section": "164.308(b)(1)",
+        "hipaa_section_normalized": "164.308(b)(1)",
+        "title": "Business Associate Contracts",
+        "hipaa_category": "Administrative Safeguards",
+        "sub_clauses": [
+          "(i) Written contract or arrangement required"
+        ],
+        "nist_controls": ["SA-9", "SR-3", "SR-5"],
+        "keywords": ["business associate", "third party", "vendor", "BAA", "contract", "subcontractor"],
+        "implementation": [
+          "Execute Business Associate Agreements",
+          "Include security clauses in all vendor contracts",
+          "Monitor vendor compliance"
+        ]
+      },
+
+      {
+        "hipaa_section": "164.310(a)(1)",
+        "hipaa_section_normalized": "164.310(a)(1)",
+        "title": "Facility Access Controls",
+        "hipaa_category": "Physical Safeguards",
+        "sub_clauses": [
+          "(i) Contingency Operations",
+          "(ii) Facility Security Plan",
+          "(iii) Access Control and Validation Procedures",
+          "(iv) Maintenance Records"
+        ],
+        "nist_controls": ["PE-2", "PE-3", "PE-5", "PE-6"],
+        "keywords": ["physical access", "facility", "badge", "visitor", "door lock", "security plan"],
+        "implementation": [
+          "Implement badge or key access to server rooms",
+          "Maintain visitor logs",
+          "Document facility security plan",
+          "Record maintenance activities"
+        ]
+      },
+
+      {
+        "hipaa_section": "164.310(b)",
+        "hipaa_section_normalized": "164.310(b)",
+        "title": "Workstation Use",
+        "hipaa_category": "Physical Safeguards",
+        "sub_clauses": [
+          "(i) Define proper use of workstations that access ePHI"
+        ],
+        "nist_controls": ["AC-11", "AC-12"],
+        "keywords": ["workstation", "desktop", "laptop", "screen lock", "usage policy"],
+        "implementation": [
+          "Define acceptable use policy for workstations",
+          "Enforce screen lock after inactivity",
+          "Position screens away from public view"
+        ]
+      },
+
+      {
+        "hipaa_section": "164.310(c)",
+        "hipaa_section_normalized": "164.310(c)",
+        "title": "Workstation Security",
+        "hipaa_category": "Physical Safeguards",
+        "sub_clauses": [
+          "(i) Physical safeguards for workstations accessing ePHI"
+        ],
+        "nist_controls": ["PE-6", "PE-18"],
+        "keywords": ["device security", "physical protection", "cable lock", "secure placement"],
+        "implementation": [
+          "Use cable locks for laptops",
+          "Place workstations in secure areas",
+          "Restrict physical access to devices"
+        ]
+      },
+
+      {
+        "hipaa_section": "164.310(d)",
+        "hipaa_section_normalized": "164.310(d)",
+        "title": "Device and Media Controls",
+        "hipaa_category": "Physical Safeguards",
+        "sub_clauses": [
+          "(i) Disposal",
+          "(ii) Media Re-use",
+          "(iii) Accountability",
+          "(iv) Data Backup and Storage"
+        ],
+        "nist_controls": ["MP-2", "MP-4", "MP-5", "MP-6", "MP-7"],
+        "keywords": ["media disposal", "hard drive", "USB", "data destruction", "media reuse", "device tracking"],
+        "implementation": [
+          "Securely wipe or destroy media before disposal",
+          "Track all devices containing ePHI",
+          "Define media reuse policy",
+          "Maintain device inventory"
+        ]
+      },
+
+      {
+        "hipaa_section": "164.312(a)(1)",
+        "hipaa_section_normalized": "164.312(a)(1)",
+        "title": "Access Control",
+        "hipaa_category": "Technical Safeguards",
+        "sub_clauses": [
+          "(i) Unique User Identification",
+          "(ii) Emergency Access Procedure",
+          "(iii) Automatic Logoff",
+          "(iv) Encryption and Decryption"
+        ],
+        "nist_controls": ["AC-2", "AC-3", "AC-6", "AC-11", "IA-2", "IA-3", "IA-4", "SC-28"],
+        "keywords": ["authentication", "unique user ID", "MFA", "least privilege", "logoff", "encryption", "access control"],
+        "implementation": [
+          "Assign unique user IDs — no shared accounts",
+          "Implement multi-factor authentication",
+          "Enable automatic session logoff",
+          "Encrypt ePHI at rest"
+        ]
+      },
+
+      {
+        "hipaa_section": "164.312(b)",
+        "hipaa_section_normalized": "164.312(b)",
+        "title": "Audit Controls",
+        "hipaa_category": "Technical Safeguards",
+        "sub_clauses": [
+          "(i) Implement hardware, software, and procedural mechanisms to record and examine activity"
+        ],
+        "nist_controls": ["AU-2", "AU-3", "AU-6", "AU-9", "AU-12"],
+        "keywords": ["audit log", "logging", "activity monitoring", "access log", "audit trail"],
+        "implementation": [
+          "Enable system and application logging",
+          "Monitor and review audit logs regularly",
+          "Protect logs from tampering",
+          "Retain logs per policy"
+        ]
+      },
+
+      {
+        "hipaa_section": "164.312(c)(1)",
+        "hipaa_section_normalized": "164.312(c)(1)",
+        "title": "Integrity",
+        "hipaa_category": "Technical Safeguards",
+        "sub_clauses": [
+          "(i) Authentication — verify ePHI has not been improperly altered or destroyed",
+          "(ii) Mechanism to Authenticate ePHI"
+        ],
+        "nist_controls": ["SC-8", "SI-7", "SI-10"],
+        "keywords": ["data integrity", "hash", "checksum", "tampering", "alteration", "corruption"],
+        "implementation": [
+          "Use checksums or hashing to verify data integrity",
+          "Implement integrity checks on ePHI transfers",
+          "Alert on detected data alteration"
+        ]
+      },
+
+      {
+        "hipaa_section": "164.312(d)",
+        "hipaa_section_normalized": "164.312(d)",
+        "title": "Person or Entity Authentication",
+        "hipaa_category": "Technical Safeguards",
+        "sub_clauses": [
+          "(i) Verify that a person or entity seeking access is the one claimed"
+        ],
+        "nist_controls": ["IA-2", "IA-3", "IA-5", "IA-8"],
+        "keywords": ["identity", "authentication", "password", "MFA", "credential", "verification"],
+        "implementation": [
+          "Implement strong password policies",
+          "Use multi-factor authentication",
+          "Define credential management procedures"
+        ]
+      },
+
+      {
+        "hipaa_section": "164.312(e)(1)",
+        "hipaa_section_normalized": "164.312(e)(1)",
+        "title": "Transmission Security",
+        "hipaa_category": "Technical Safeguards",
+        "sub_clauses": [
+          "(i) Integrity Controls",
+          "(ii) Encryption"
+        ],
+        "nist_controls": ["SC-8", "SC-12", "SC-13", "SC-28"],
+        "keywords": ["encryption", "TLS", "SSL", "data in transit", "secure transmission", "HTTPS"],
+        "implementation": [
+          "Use TLS 1.2 or higher for all ePHI transmission",
+          "Encrypt data in transit",
+          "Use secure channels only",
+          "Validate transmission integrity"
+        ]
+      },
+
+      {
+        "hipaa_section": "164.314(a)",
+        "hipaa_section_normalized": "164.314(a)",
+        "title": "Business Associate Contracts — Organizational Requirements",
+        "hipaa_category": "Organizational Requirements",
+        "sub_clauses": [
+          "(i) Business associate contracts must meet Security Rule requirements",
+          "(ii) Other arrangements"
+        ],
+        "nist_controls": ["SA-9", "SA-12"],
+        "keywords": ["contracts", "business associate", "organizational", "partner", "subcontractor"],
+        "implementation": [
+          "Ensure all BA contracts include HIPAA security requirements",
+          "Define partner security responsibilities clearly"
+        ]
+      },
+
+      {
+        "hipaa_section": "164.316(a)",
+        "hipaa_section_normalized": "164.316(a)",
+        "title": "Policies and Procedures",
+        "hipaa_category": "Policies and Documentation",
+        "sub_clauses": [
+          "(i) Implement reasonable and appropriate policies and procedures"
+        ],
+        "nist_controls": ["PL-1", "PL-2", "PM-1"],
+        "keywords": ["policy", "procedure", "documentation", "written policy", "security policy"],
+        "implementation": [
+          "Document all security policies in writing",
+          "Review and update policies annually",
+          "Make policies accessible to workforce"
+        ]
+      },
+
+      {
+        "hipaa_section": "164.316(b)",
+        "hipaa_section_normalized": "164.316(b)",
+        "title": "Documentation Requirements",
+        "hipaa_category": "Policies and Documentation",
+        "sub_clauses": [
+          "(i) Time limit — retain documentation for 6 years",
+          "(ii) Availability — make available to those responsible",
+          "(iii) Updates — review and update in response to changes"
+        ],
+        "nist_controls": ["PL-2", "CA-7", "AU-11"],
+        "keywords": ["documentation", "retention", "6 years", "record keeping", "version control", "updates"],
+        "implementation": [
+          "Retain all security documentation for minimum 6 years",
+          "Implement version control for all policies",
+          "Update documentation when changes occur",
+          "Make documentation available to relevant staff"
+        ]
+      }
+
+    ]
+  }
+}
