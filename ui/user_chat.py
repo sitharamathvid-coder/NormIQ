@@ -220,24 +220,36 @@ def check_pending_updates():
                         officer_answer  = data.get("officer_answer")
                         original_answer = data.get("answer", "")
                         final_answer    = officer_answer or original_answer
- 
+
+                        # Get citations
+                        import json as _json
+                        citations = []
+                        try:
+                            raw_cites = data.get("citations", [])
+                            if isinstance(raw_cites, str):
+                                citations = _json.loads(raw_cites)
+                            elif isinstance(raw_cites, list):
+                                citations = raw_cites
+                        except Exception:
+                            citations = []
+
                         st.session_state.messages[i] = {
                             "role":    "bot",
-                            "content": (
-                                f"✅ Answer Ready — "
-                                f"Ref {ref_id}\n\n"
-                                f"{final_answer}\n\n"
-                                f"✔ Reviewed by compliance officer."
-                            ),
+                            "content": final_answer,
                             "status":  "answered",
                             "ref_id":  ref_id,
-                            "result":  None    
+                            "result":  {
+                                "summary":          data.get("summary", ""),
+                                "citations":        citations,
+                                "confidence":       1.0,
+                                "conflict_warning": "",
+                                "was_cached":       False
+                            }
                         }
                         updated = True
             except Exception:
                 continue
     return updated
- 
  
 # ── Check for officer updates ────────────────────────────────
 has_pending = any(
@@ -258,13 +270,13 @@ def display_message(msg: dict, result: dict = None):
     role    = msg["role"]
     content = msg["content"]
     status  = msg.get("status", "answered")
- 
+
     if role == "nurse":
         st.markdown(
             f'<div class="chat-message-user">{content}</div>',
             unsafe_allow_html=True
         )
- 
+
     elif role == "bot":
         if status == "pending":
             st.markdown(
@@ -272,31 +284,38 @@ def display_message(msg: dict, result: dict = None):
                 unsafe_allow_html=True
             )
         else:
-            st.markdown(
-                f'<div class="chat-message-bot">{content}</div>',
-                unsafe_allow_html=True
-            )
- 
-            # Show citations
-            if result and result.get("citations"):
-                citation_text = " · ".join([
-                    f"{c['regulation']} — {c['citation']}"
-                    for c in result["citations"]
-                ])
+            # Debug — remove after testing
+            print(f"DEBUG result keys: {result.keys() if result else 'None'}")
+            print(f"DEBUG summary: {result.get('summary') if result else 'None'}")
+            # Show summary if available
+            if result and result.get("summary"):
                 st.markdown(
-                    f'<div class="citation-box">📋 {citation_text}</div>',
+                    f'<div class="chat-message-bot">'
+                    f'<b>📌</b> {result["summary"]}'
+                    f'</div>',
                     unsafe_allow_html=True
                 )
- 
-            # Show conflict warning
+                # Full answer in expander
+                with st.expander("📖 View full answer"):
+                    st.markdown(content)
+            else:
+                # No summary — show full answer directly
+                st.markdown(
+                    f'<div class="chat-message-bot">{content}</div>',
+                    unsafe_allow_html=True
+                )
+
+            
+
+            # Conflict warning
             if result and result.get("conflict_warning"):
                 st.markdown(
                     f'<div class="conflict-warning">'
                     f'{result["conflict_warning"]}</div>',
                     unsafe_allow_html=True
                 )
- 
-            # Show confidence
+
+            # Confidence
             if result:
                 conf       = result.get("confidence", 0)
                 conf_class = "confidence-high" if conf >= 0.80 \
@@ -310,7 +329,7 @@ def display_message(msg: dict, result: dict = None):
                     f'<span class="cached-badge">{cached}</span>',
                     unsafe_allow_html=True
                 )
- 
+
  
 # ── Display all messages ─────────────────────────────────────
 for i, msg in enumerate(st.session_state.messages):

@@ -2,9 +2,9 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
+ 
 import uuid
-from pipeline.guardrails               import check_input, check_output, check_regulation_conflict
+from pipeline.guardrails                  import check_input, check_output, check_regulation_conflict
 from agent.tools.tool_query_understanding import understand_query
 from agent.tools.tool_hybrid_search       import hybrid_search
 from agent.tools.tool_multi_query         import multi_query_search
@@ -15,28 +15,28 @@ from database.db_manager                  import (
     chat_history_add, generate_ref_id
 )
 from config.settings import CONFIDENCE_THRESHOLD
-
+ 
+ 
 def alert_officer_telegram(ref_id: str, question: str,
                            answer: str, citations: list,
                            confidence: float, regulations: list,
-                           user_id: str):
+                           user_id: str,
+                           summary: str = ""):
     """Send low confidence alert to officer via Telegram."""
     try:
         import asyncio
-        from telegram import Bot
-        from config.settings import TELEGRAM_BOT_TOKEN
-        from config.settings import TELEGRAM_OFFICER_CHAT_ID
-        from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-
+        from telegram import Bot, InlineKeyboardButton, InlineKeyboardMarkup
+        from config.settings import TELEGRAM_BOT_TOKEN, TELEGRAM_OFFICER_CHAT_ID
+ 
         if not TELEGRAM_BOT_TOKEN or not TELEGRAM_OFFICER_CHAT_ID:
             print("Telegram not configured — skipping alert")
             return
-
+ 
         cite_text = "\n".join([
-            f"  • {c.get('regulation')} — {c.get('citation')}"
+            f"  • {c.get('citation', '')}"
             for c in citations
         ]) if citations else "None"
-
+ 
         message = (
             f"⚠ <b>Review Required</b>\n\n"
             f"📋 <b>Ref:</b> <code>{ref_id}</code>\n"
@@ -44,11 +44,12 @@ def alert_officer_telegram(ref_id: str, question: str,
             f"📊 <b>Confidence:</b> {confidence}\n"
             f"⚖ <b>Regulation:</b> {', '.join(regulations)}\n\n"
             f"❓ <b>Question:</b>\n{question}\n\n"
+            f"📌 <b>Summary:</b>\n{summary}\n\n"
             f"🤖 <b>AI Draft:</b>\n{answer}\n\n"
             f"📋 <b>Citations:</b>\n{cite_text}\n\n"
             f"<i>Nurse waiting — please review.</i>"
         )
-
+ 
         keyboard = InlineKeyboardMarkup([
             [
                 InlineKeyboardButton(
@@ -61,7 +62,7 @@ def alert_officer_telegram(ref_id: str, question: str,
                 )
             ]
         ])
-
+ 
         async def send():
             bot = Bot(token=TELEGRAM_BOT_TOKEN)
             await bot.send_message(
@@ -70,51 +71,37 @@ def alert_officer_telegram(ref_id: str, question: str,
                 parse_mode   = "HTML",
                 reply_markup = keyboard
             )
-
+ 
         asyncio.run(send())
         print(f"Officer alerted via Telegram — {ref_id}")
-
+ 
     except Exception as e:
         print(f"Telegram alert error: {e}")
-        # Never crash the agent because of Telegram failure
-        
+ 
+ 
 def run_agent(question: str, user_id: str = "user") -> dict:
     """
     Main NormIQ Agent
     Orchestrates all 4 tools with guardrails and caching.
-
-    Returns:
-    {
-        "status":          "answered" | "pending_review" | "error" | "clarification",
-        "answer":          "final answer text",
-        "citations":       [...],
-        "confidence":      0.91,
-        "regulation":      ["HIPAA"],
-        "ref_id":          "REF-XXXXXXXX",
-        "conflict":        False,
-        "conflict_warning": "",
-        "message":         "message to show nurse"
-    }
     """
-
+ 
     print("\n" + "=" * 60)
     print(f"NormIQ Agent — Processing question from {user_id}")
     print(f"Question: {question[:80]}")
     print("=" * 60)
-
+ 
     # ── STEP 1: Input guardrails ─────────────────────────────
     guard = check_input(question)
     if not guard["passed"]:
         print(f"Input guardrail failed: {guard['reason']}")
-
-        # Save to chat history
+ 
         chat_history_add(user_id, "nurse", question)
         chat_history_add(user_id, "bot", guard["message"])
-
-        # Clarification needed
+ 
         if guard["reason"] in ["too_short", "not_compliance"]:
             return {
                 "status":           "clarification",
+                "summary":          "",
                 "answer":           "",
                 "citations":        [],
                 "confidence":       0.0,
@@ -124,9 +111,10 @@ def run_agent(question: str, user_id: str = "user") -> dict:
                 "conflict_warning": "",
                 "message":          guard["message"]
             }
-
+ 
         return {
             "status":           "error",
+            "summary":          "",
             "answer":           "",
             "citations":        [],
             "confidence":       0.0,
@@ -136,50 +124,47 @@ def run_agent(question: str, user_id: str = "user") -> dict:
             "conflict_warning": "",
             "message":          guard["message"]
         }
-
+ 
     # Use cleaned question
     question = guard["cleaned"]
-
+ 
     # ── STEP 2: Cache check ──────────────────────────────────
     cached = cache_get(question)
     if cached:
         print("Cache HIT — returning cached answer")
-
-        # Still run conflict detection for cached answers
-        # Re-detect regulations from cached data
-        cached_regulation = cached.get("regulation", "HIPAA")
+ 
+        cached_regulation  = cached.get("regulation", "HIPAA")
         cached_regulations = [cached_regulation]
-
-        # Check if question involves multiple regulations
+ 
         q_lower = question.lower()
         if "gdpr" in q_lower or "eu" in q_lower or "european" in q_lower:
             if "GDPR" not in cached_regulations:
                 cached_regulations.append("GDPR")
-
+ 
         conflict_check = check_regulation_conflict(cached_regulations)
-
-        # Log to chat history
+ 
         chat_history_add(user_id, "nurse", question)
         chat_history_add(user_id, "bot",
                         cached["answer"], status="answered")
-
-        # Log to audit
+ 
         ref_id = audit_log_create(
             user_id    = user_id,
             question   = question,
             regulation = cached.get("regulation", ""),
             was_cached = True
         )
-        # Update audit with answer immediately for cached
+ 
         audit_log_update_answer(
             ref_id     = ref_id,
             answer     = cached["answer"],
             citations  = cached.get("citations", []),
-            confidence = cached.get("confidence", 1.0)
+            confidence = cached.get("confidence", 1.0),
+            summary    = cached.get("summary", "")
         )
-
+ 
         return {
             "status":           "answered",
+            "summary":          cached.get("summary", ""),
             "answer":           cached["answer"],
             "citations":        cached.get("citations", []),
             "confidence":       cached.get("confidence", 1.0),
@@ -190,20 +175,20 @@ def run_agent(question: str, user_id: str = "user") -> dict:
             "message":          cached["answer"],
             "was_cached":       True
         }
-
+ 
     # ── STEP 3: Query understanding ──────────────────────────
     query_info = understand_query(question)
-
-    # Not clear — ask clarification
+ 
     if not query_info["is_clear"]:
         print("Question not clear — asking clarification")
-
+ 
         chat_history_add(user_id, "nurse", question)
         chat_history_add(user_id, "bot",
                         query_info["clarification_needed"])
-
+ 
         return {
             "status":           "clarification",
+            "summary":          "",
             "answer":           "",
             "citations":        [],
             "confidence":       0.0,
@@ -213,25 +198,24 @@ def run_agent(question: str, user_id: str = "user") -> dict:
             "conflict_warning": "",
             "message":          query_info["clarification_needed"]
         }
-
+ 
     regulations   = query_info["regulations"]
     intent        = query_info["intent"]
     use_crosswalk = query_info["use_crosswalk"]
-
-    # Default to HIPAA if no regulation detected
+ 
     if not regulations:
         regulations = ["HIPAA"]
-
+ 
     # ── STEP 4: Hybrid search ────────────────────────────────
     search_result = hybrid_search(
         query         = question,
         regulations   = regulations,
         use_crosswalk = use_crosswalk
     )
-
+ 
     chunks      = search_result["chunks"]
     chunks_good = search_result["chunks_good"]
-
+ 
     # ── STEP 5: Multi-query if chunks weak ───────────────────
     if not chunks_good:
         print("Chunks weak — running multi-query search...")
@@ -240,7 +224,7 @@ def run_agent(question: str, user_id: str = "user") -> dict:
             regulations = regulations
         )
         chunks = search_result["chunks"]
-
+ 
     # ── STEP 6: Generate answer ──────────────────────────────
     answer_result = generate_answer(
         question    = question,
@@ -248,45 +232,36 @@ def run_agent(question: str, user_id: str = "user") -> dict:
         regulations = regulations,
         intent      = intent
     )
-
-    answer     = answer_result["answer"]
-    citations  = answer_result["citations"]
-    has_conflict      = answer_result.get("has_conflict", False)
-    conflict_warning  = answer_result.get("conflict_warning", "")
-
+ 
+    answer           = answer_result["answer"]
+    summary          = answer_result.get("summary", "")
+    citations        = answer_result["citations"]
+    has_conflict     = answer_result.get("has_conflict", False)
+    conflict_warning = answer_result.get("conflict_warning", "")
+ 
     # ── STEP 7: Output guardrails ────────────────────────────
     out_guard = check_output(answer, citations)
-
+ 
     # ── STEP 8: Conflict detection ───────────────────────────
     conflict_check = check_regulation_conflict(regulations)
     if conflict_check["conflict"] and not conflict_warning:
         conflict_warning = conflict_check["warning"]
         has_conflict     = True
-
+ 
     # ── STEP 9: Calculate final confidence ───────────────────
     confidence = search_result.get("confidence", 0.0)
-    # For comparison intent — both regulations found
-    # Confidence based on whether we found chunks from BOTH
+ 
     if intent == "comparison" and len(regulations) > 1:
-        regs_found = set(
-            c.get("regulation", "") 
-            for c in chunks
-        )
+        regs_found = set(c.get("regulation", "") for c in chunks)
         if all(r in regs_found for r in regulations):
-            # Both regulations represented — boost confidence
             confidence = max(confidence, 0.82)
             print(f"Comparison intent — both regulations found "
                   f"→ confidence boosted to {confidence}")
-        else:
-            # Missing one regulation — keep low → officer review
-            print(f"Comparison intent — missing regulation chunks "
-                  f"→ keeping low confidence")
-
-    # Force review if output guardrail flags it
+ 
     if out_guard.get("force_review"):
         confidence = min(confidence, 0.75)
         print(f"Output guardrail forcing review: {out_guard['reason']}")
-
+ 
     # ── STEP 10: Save to cache if high confidence ────────────
     if confidence >= CONFIDENCE_THRESHOLD:
         cache_set(
@@ -294,28 +269,44 @@ def run_agent(question: str, user_id: str = "user") -> dict:
             answer     = answer,
             citations  = citations,
             regulation = regulations[0] if regulations else "HIPAA",
-            confidence = confidence
+            confidence = confidence,
+            summary    = summary    # ← add this
         )
-
+        # Also save summary to cache
+        try:
+            from database.db_manager import get_connection
+            import json as _json
+            from database.db_manager import generate_hash
+            conn = get_connection()
+            if conn:
+                cur = conn.cursor()
+                cur.execute("""
+                    UPDATE cache_store
+                    SET summary = %s
+                    WHERE question_hash = %s
+                """, (summary, generate_hash(question)))
+                conn.commit()
+                cur.close()
+                conn.close()
+        except Exception:
+            pass
+ 
     # ── STEP 11: Create audit log entry ─────────────────────
     ref_id = audit_log_create(
         user_id    = user_id,
         question   = question,
         regulation = ", ".join(regulations)
     )
-
-    # Only update answer if high confidence
-    # Low confidence stays pending until officer reviews
+ 
     if confidence >= CONFIDENCE_THRESHOLD:
         audit_log_update_answer(
             ref_id     = ref_id,
             answer     = answer,
             citations  = citations,
-            confidence = confidence
+            confidence = confidence,
+            summary    = summary
         )
     else:
-        # Save answer in audit but keep status as pending
-        # Officer will change status to reviewed when they act
         from database.db_manager import get_connection
         import json as _json
         conn = get_connection()
@@ -325,13 +316,15 @@ def run_agent(question: str, user_id: str = "user") -> dict:
                 UPDATE audit_log
                 SET answer     = %s,
                     citations  = %s,
-                    confidence = %s
+                    confidence = %s,
+                    summary    = %s
                 WHERE ref_id = %s
-            """, (answer, _json.dumps(citations), confidence, ref_id))
+            """, (answer, _json.dumps(citations),
+                  confidence, summary, ref_id))
             conn.commit()
             cur.close()
             conn.close()
-
+ 
     # ── STEP 12: Save to chat history ────────────────────────
     chat_history_add(
         user_id = user_id,
@@ -339,12 +332,11 @@ def run_agent(question: str, user_id: str = "user") -> dict:
         message = question,
         ref_id  = ref_id
     )
-
-    # Format display message
+ 
     display_message = format_answer_for_display(answer_result)
     if conflict_warning and conflict_warning not in display_message:
         display_message += f"\n\n{conflict_warning}"
-
+ 
     # ── STEP 13: Decide status ───────────────────────────────
     if confidence >= CONFIDENCE_THRESHOLD:
         status = "answered"
@@ -357,7 +349,7 @@ def run_agent(question: str, user_id: str = "user") -> dict:
         )
     else:
         status = "pending_review"
-        # ── Alert officer via Telegram ────────────────────
+ 
         alert_officer_telegram(
             ref_id      = ref_id,
             question    = question,
@@ -365,12 +357,14 @@ def run_agent(question: str, user_id: str = "user") -> dict:
             citations   = citations,
             confidence  = confidence,
             regulations = regulations,
-            user_id     = user_id
+            user_id     = user_id,
+            summary     = summary
         )
+ 
         pending_message = (
             f"🔍 Your question is under expert review.\n\n"
             f"Reference ID: {ref_id}\n\n"
-            f"You will receive a Telegram notification "
+            f"You will receive a notification "
             f"when your answer is ready."
         )
         chat_history_add(
@@ -381,14 +375,15 @@ def run_agent(question: str, user_id: str = "user") -> dict:
             status  = "pending"
         )
         display_message = pending_message
-
+ 
     print(f"\nAgent complete:")
     print(f"  Status:     {status}")
     print(f"  Confidence: {confidence}")
     print(f"  Ref ID:     {ref_id}")
-
+ 
     return {
         "status":           status,
+        "summary":          summary,
         "answer":           answer,
         "citations":        citations,
         "confidence":       confidence,
@@ -399,16 +394,15 @@ def run_agent(question: str, user_id: str = "user") -> dict:
         "message":          display_message,
         "was_cached":       False
     }
-
-
+ 
+ 
 # ════════════════════════════════════════════════════════════
 # TEST
 # ════════════════════════════════════════════════════════════
-
+ 
 if __name__ == "__main__":
     print("Testing NormIQ Agent...\n")
-
-    # Test 1 — Simple HIPAA
+ 
     print("=" * 60)
     print("Test 1 — HIPAA breach notification")
     result = run_agent(
@@ -416,22 +410,20 @@ if __name__ == "__main__":
         user_id  = "nurse_test"
     )
     print(f"\nStatus:     {result['status']}")
+    print(f"Summary:    {result['summary']}")
     print(f"Confidence: {result['confidence']}")
     print(f"Ref ID:     {result['ref_id']}")
-    print(f"\nMessage:\n{result['message']}")
-
-    # Test 2 — Cross regulation
+ 
     print("\n" + "=" * 60)
     print("Test 2 — HIPAA vs GDPR comparison")
     result = run_agent(
         question = "Compare HIPAA and GDPR breach notification deadlines",
         user_id  = "doctor_test"
     )
-    print(f"\nStatus:     {result['status']}")
-    print(f"Conflict:   {result['conflict']}")
-    print(f"\nMessage:\n{result['message']}")
-
-    # Test 3 — Vague question
+    print(f"\nStatus:   {result['status']}")
+    print(f"Summary:  {result['summary']}")
+    print(f"Conflict: {result['conflict']}")
+ 
     print("\n" + "=" * 60)
     print("Test 3 — Vague question")
     result = run_agent(
@@ -440,5 +432,5 @@ if __name__ == "__main__":
     )
     print(f"\nStatus:  {result['status']}")
     print(f"Message: {result['message']}")
-
+ 
     print("\nAgent test complete!")

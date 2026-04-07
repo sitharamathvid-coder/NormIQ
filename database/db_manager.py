@@ -60,7 +60,8 @@ def cache_get(question: str):
 
 
 def cache_set(question: str, answer: str, citations: list,
-              regulation: str, confidence: float):
+              regulation: str, confidence: float,
+              summary: str = ""):
     """Save answer to cache with expiry date."""
     conn = get_connection()
     if not conn:
@@ -72,17 +73,18 @@ def cache_set(question: str, answer: str, citations: list,
         cur.execute("""
             INSERT INTO cache_store
             (question_hash, question_text, answer, citations,
-             regulation, confidence, expires_at)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+             regulation, confidence, summary, expires_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             ON CONFLICT (question_hash) DO UPDATE
             SET answer     = EXCLUDED.answer,
                 citations  = EXCLUDED.citations,
                 confidence = EXCLUDED.confidence,
+                summary    = EXCLUDED.summary,
                 expires_at = EXCLUDED.expires_at
         """, (
             question_hash, question, answer,
             json.dumps(citations), regulation,
-            confidence, expires_at
+            confidence, summary, expires_at
         ))
         conn.commit()
         cur.close()
@@ -143,8 +145,8 @@ def audit_log_create(user_id: str, question: str,
 
 
 def audit_log_update_answer(ref_id: str, answer: str,
-                            citations: list, confidence: float):
-    """Update audit log when answer is generated."""
+                            citations: list, confidence: float,
+                            summary: str = ""):
     conn = get_connection()
     if not conn:
         return False
@@ -155,10 +157,11 @@ def audit_log_update_answer(ref_id: str, answer: str,
             SET answer     = %s,
                 citations  = %s,
                 confidence = %s,
-                status     = 'answered',
+                summary    = %s,
                 answer_sent_at = NOW()
             WHERE ref_id = %s
-        """, (answer, json.dumps(citations), confidence, ref_id))
+        """, (answer, json.dumps(citations),
+              confidence, summary, ref_id))
         conn.commit()
         cur.close()
         conn.close()

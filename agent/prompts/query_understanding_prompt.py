@@ -121,7 +121,8 @@ If [condition], apply [stricter regulation].
 
 You must respond with ONLY a valid JSON object:
 {{
-    "answer": "your full compliance answer here",
+    "summary": "one sentence key point — max 20 words — plain english for nurse",
+    "answer": "your full detailed compliance answer here",
     "citations": [
         {{
             "regulation": "HIPAA",
@@ -134,4 +135,12 @@ You must respond with ONLY a valid JSON object:
     "conflict_warning": "",
     "regulations_covered": ["HIPAA"]
 }}
+
+Summary rules:
+- Maximum 20 words
+- Plain English — no legal jargon
+- State the key fact only
+- Example: "Patients have the right to access and copy their medical records under HIPAA."
+- Example: "HIPAA requires breach notification within 60 days of discovery."
+- Example: "GDPR requires breach notification within 72 hours — stricter than HIPAA."
 """

@@ -87,8 +87,18 @@ def generate_answer(question: str,
         raw = raw.replace("```json", "").replace("```", "").strip()
 
         result = json.loads(raw)
+         # Deduplicate citations by citation field
+        seen_citations = set()
+        unique_citations = []
+        for cite in result.get("citations", []):
+            key = cite.get("citation", "")
+            if key not in seen_citations:
+                seen_citations.add(key)
+                unique_citations.append(cite)
+        result["citations"] = unique_citations
 
         # Validate fields
+        result.setdefault("summary",             "")
         result.setdefault("answer",              "")
         result.setdefault("citations",           [])
         result.setdefault("has_conflict",        False)
@@ -138,8 +148,9 @@ def format_answer_for_display(result: dict) -> str:
     if result.get("citations"):
         lines.append("\n📋 Sources cited:")
         for cite in result["citations"]:
-            lines.append(f"  • {cite['regulation']} — "
-                        f"{cite['citation']}")
+            lines.append(
+                f"  • {cite.get('citation')}"
+            )
 
     return "\n".join(lines)
 

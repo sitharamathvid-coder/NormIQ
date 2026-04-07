@@ -48,6 +48,7 @@ class QueryRequest(BaseModel):
 
 class QueryResponse(BaseModel):
     status:           str
+    summary:          str
     answer:           str
     citations:        list
     confidence:       float
@@ -91,6 +92,7 @@ def query(request: QueryRequest):
         )
         return QueryResponse(
             status           = result["status"],
+            summary          = result.get("summary", ""),
             answer           = result.get("answer", ""),
             citations        = result.get("citations", []),
             confidence       = result.get("confidence", 0.0),
