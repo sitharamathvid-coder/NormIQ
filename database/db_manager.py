@@ -158,6 +158,7 @@ def audit_log_update_answer(ref_id: str, answer: str,
                 citations  = %s,
                 confidence = %s,
                 summary    = %s,
+                status     = 'answered',
                 answer_sent_at = NOW()
             WHERE ref_id = %s
         """, (answer, json.dumps(citations),
