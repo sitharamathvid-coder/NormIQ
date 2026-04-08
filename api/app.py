@@ -136,10 +136,12 @@ def officer_action(request: OfficerActionRequest):
         )
 
         # Update chat history
+        print(f"Officer action — updating chat_history for {request.ref_id}")
         chat_history_update_status(
             ref_id = request.ref_id,
             status = "answered"
         )
+        print(f"Chat history updated for {request.ref_id}")
 
         # ── Update cache with confidence 1.0 ─────────────────
         # Officer verified → cache as 100% confident
@@ -173,17 +175,76 @@ def officer_action(request: OfficerActionRequest):
                     citations  = row.get("citations", [])
                     regulation = row.get("regulation", "HIPAA")
 
+                    # ── Generate new summary if rewritten ─────
+                    if request.action == "rewritten" and request.officer_answer:
+                        try:
+                            from openai import OpenAI
+                            from config.settings import OPENAI_API_KEY
+                            client = OpenAI(api_key=OPENAI_API_KEY)
+                            resp = client.chat.completions.create(
+                                model    = "gpt-4o-mini",
+                                messages = [{
+                                    "role":    "user",
+                                    "content": f"Summarise this compliance answer in maximum 20 words in plain English for a nurse:\n\n{request.officer_answer}"
+                                }],
+                                temperature = 0.0
+                            )
+                            new_summary = resp.choices[0].message.content.strip()
+                            cur.execute("""
+                                UPDATE audit_log
+                                SET summary = %s
+                                WHERE ref_id = %s
+                            """, (new_summary, request.ref_id))
+                            conn.commit()
+                            print(f"New summary generated: {new_summary}")
+                        except Exception as e:
+                            print(f"Summary generation error: {e}")
+                            # Also update cache summary
+                        try:
+                            from database.db_manager import generate_hash
+                            conn2 = get_connection()
+                            if conn2:
+                                cur2 = conn2.cursor()
+                                cur2.execute("""
+                                    UPDATE cache_store
+                                    SET summary = %s
+                                    WHERE question_hash = %s
+                                """, (new_summary, 
+                                      generate_hash(row["question"])))
+                                conn2.commit()
+                                cur2.close()
+                                conn2.close()
+                        except Exception as e:
+                            print(f"Cache summary update error: {e}")
+
+                    # ── Update chat_history content ───────────
+                    # Replace pending text with actual answer
+                    cur.execute("""
+                        UPDATE chat_history
+                        SET status  = 'answered',
+                            message = %s
+                        WHERE ref_id = %s
+                        AND role = 'bot'
+                    """, (final_answer, request.ref_id))
+                    conn.commit()
+                    print(f"Chat history content updated for {request.ref_id}")
+
                     cur.close()
                     conn.close()
 
                     # Save to cache with confidence 1.0
+                     # Get summary from audit log
+                    summary = row.get("summary", "")
+
+                    # Save to cache with confidence 1.0 + summary
                     from database.db_manager import cache_set
                     cache_set(
                         question   = question,
                         answer     = final_answer,
                         citations  = citations if isinstance(citations, list) else [],
                         regulation = regulation,
-                        confidence = 1.0   # ← officer verified!
+                        confidence = 1.0,
+                        summary    = summary
                     )
                     print(f"Cache updated with confidence 1.0 "
                           f"for {request.ref_id}")

@@ -139,8 +139,9 @@ You must respond with ONLY a valid JSON object:
 Summary rules:
 - Maximum 20 words
 - Plain English — no legal jargon
-- State the key fact only
-- Example: "Patients have the right to access and copy their medical records under HIPAA."
-- Example: "HIPAA requires breach notification within 60 days of discovery."
-- Example: "GDPR requires breach notification within 72 hours — stricter than HIPAA."
+- Include the key action the nurse needs to take
+- Include the regulation name
+- Include article/section if possible
+- Example: "Conduct a DPIA before high-risk processing under GDPR Article 35."
+- Example: "Notify affected patients within 60 days of breach under HIPAA §164.404."
 """

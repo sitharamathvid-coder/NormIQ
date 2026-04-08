@@ -183,15 +183,53 @@ if not st.session_state.loaded_history:
             limit   = 20
         )
         if history:
-            st.session_state.messages = [
-                {
+            messages = []
+            for h in history:
+                # Skip stale pending messages
+                if (h.get("status") == "answered" and
+                    "under expert review" in h.get("message", "")):
+                    continue
+
+                msg = {
                     "role":    h["role"],
                     "content": h["message"],
                     "status":  h.get("status", "answered"),
-                    "ref_id":  h.get("ref_id")
+                    "ref_id":  h.get("ref_id"),
+                    "result":  None
                 }
-                for h in history
-            ]
+
+                # For answered bot messages — fetch result from API
+                if (h["role"] == "bot" and
+                    h.get("status") == "answered" and
+                    h.get("ref_id")):
+                    print(f"Fetching result for {h['ref_id']}")
+                    try:
+                        resp = requests.get(
+                            f"{API_URL}/audit/ref/{h['ref_id']}",
+                            timeout = 3
+                        )
+                        if resp.status_code == 200:
+                            data = resp.json()
+                            citations = data.get("citations", [])
+                            if isinstance(citations, str):
+                                import json as _json
+                                try:
+                                    citations = _json.loads(citations)
+                                except Exception:
+                                    citations = []
+                            msg["result"] = {
+                                "summary":          data.get("summary", ""),
+                                "citations":        citations,
+                                "confidence":       data.get("confidence", 0),
+                                "conflict_warning": "",
+                                "was_cached":       data.get("was_cached", False)
+                            }
+                    except Exception:
+                        pass
+
+                messages.append(msg)
+
+            st.session_state.messages = messages
         st.session_state.loaded_history = True
     except Exception:
         st.session_state.loaded_history = True
@@ -217,21 +255,19 @@ def check_pending_updates():
                 if response.status_code == 200:
                     data = response.json()
                     if data.get("status") == "reviewed":
+
                         officer_answer  = data.get("officer_answer")
                         original_answer = data.get("answer", "")
                         final_answer    = officer_answer or original_answer
 
-                        # Get citations
-                        import json as _json
-                        citations = []
-                        try:
-                            raw_cites = data.get("citations", [])
-                            if isinstance(raw_cites, str):
-                                citations = _json.loads(raw_cites)
-                            elif isinstance(raw_cites, list):
-                                citations = raw_cites
-                        except Exception:
-                            citations = []
+                        # Citations already in correct format from API
+                        citations = data.get("citations", [])
+                        if isinstance(citations, str):
+                            import json as _json
+                            try:
+                                citations = _json.loads(citations)
+                            except Exception:
+                                citations = []
 
                         st.session_state.messages[i] = {
                             "role":    "bot",
@@ -241,7 +277,7 @@ def check_pending_updates():
                             "result":  {
                                 "summary":          data.get("summary", ""),
                                 "citations":        citations,
-                                "confidence":       1.0,
+                                "confidence": data.get("confidence", 0),
                                 "conflict_warning": "",
                                 "was_cached":       False
                             }
@@ -321,6 +357,8 @@ def display_message(msg: dict, result: dict = None):
                 conf_class = "confidence-high" if conf >= 0.80 \
                              else "confidence-low"
                 cached     = "⚡ Cached" if result.get("was_cached") \
+                             else ""
+                reviewed   = "✅ Officer Verified" if result.get("was_reviewed") \
                              else ""
                 st.markdown(
                     f'<span class="{conf_class}">'

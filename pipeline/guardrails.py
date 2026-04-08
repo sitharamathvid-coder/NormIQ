@@ -92,17 +92,30 @@ def check_input(question: str) -> dict:
         }
 
     # G5 — Prompt injection
+    import re
     lower = cleaned.lower()
     for keyword in INJECTION_KEYWORDS:
-        if keyword in lower:
-            return {
-                "passed": False,
-                "reason": "injection",
-                "message": "I can only answer compliance questions about "
-                           "HIPAA, GDPR, and NIST regulations.",
-                "cleaned": cleaned
-            }
-
+        if keyword == "act as":
+            # Must be standalone "act as" not inside a word
+            # "impact assessment" → no match
+            # "act as a doctor" → match
+            if re.search(r'(?<!\w)act as(?!\w)', lower):
+                return {
+                    "passed": False,
+                    "reason": "injection",
+                    "message": "I can only answer compliance questions about "
+                               "HIPAA, GDPR, and NIST regulations.",
+                    "cleaned": cleaned
+                }
+        else:
+            if keyword in lower:
+                return {
+                    "passed": False,
+                    "reason": "injection",
+                    "message": "I can only answer compliance questions about "
+                               "HIPAA, GDPR, and NIST regulations.",
+                    "cleaned": cleaned
+                }
     # G6 — Sanitise special characters
     cleaned = re.sub(r"<[^>]+>", "", cleaned)       # remove HTML tags
     cleaned = re.sub(r"[;\"\']", "", cleaned)        # remove SQL chars
