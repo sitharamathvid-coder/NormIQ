@@ -115,34 +115,58 @@ def calculate_confidence(reranked_chunks: list,
                          pinecone_chunks: list,
                          intent: str = "lookup") -> float:
     """
-    Week 2 confidence formula:
-    confidence = (cohere_score × 0.50) + (retrieval_score × 0.50)
+    Confidence formula using average of top 3 chunks.
+    More reliable than single chunk score.
     """
     if not reranked_chunks:
         return 0.0
 
-    # Top chunk scores
-    top_chunk        = reranked_chunks[0]
-    cohere_score     = top_chunk.get("cohere_score", 0.0)
-    retrieval_score  = top_chunk.get("original_score", 0.0)
+    # ── Take top 3 chunks ────────────────────────────────────
+    top_chunks = reranked_chunks[:3]
 
-    # Normalise retrieval score to 0-1 range
-    # Pinecone cosine scores are already 0-1
-    # BM25 scores can be higher — normalise
-    if top_chunk.get("source") == "bm25":
-        # BM25 scores typically 0-30 — normalise
-        max_bm25        = 30.0
-        retrieval_score = min(retrieval_score / max_bm25, 1.0)
+    # ── Average Cohere scores ────────────────────────────────
+    cohere_scores = [
+        c.get("cohere_score", 0.0)
+        for c in top_chunks
+    ]
+    avg_cohere = sum(cohere_scores) / len(cohere_scores)
 
-    confidence = (cohere_score * 0.50) + (retrieval_score * 0.50)
+    # ── Average Pinecone retrieval scores ────────────────────
+    retrieval_scores = []
+    for c in top_chunks:
+        score = c.get("original_score", 0.0)
+        # Normalise BM25 scores to 0-1
+        if c.get("source") == "bm25":
+            score = min(score / 30.0, 1.0)
+        retrieval_scores.append(score)
+    avg_retrieval = sum(retrieval_scores) / len(retrieval_scores)
+
+    # ── Calculate confidence ─────────────────────────────────
+    if pinecone_chunks:
+        pinecone_top = pinecone_chunks[0].get("score", 0.0)
+         
+
+        # Pinecone rescue — Cohere struggling with legal text
+        if pinecone_top > 0.75 and avg_cohere < 0.50:
+            print(f"Pinecone rescue — "
+                  f"Pinecone: {pinecone_top:.3f}, "
+                  f"Cohere avg: {avg_cohere:.3f}")
+            confidence = (avg_cohere * 0.30) + (pinecone_top * 0.70)
+
+        elif intent == "comparison":
+            confidence = (avg_cohere * 0.20) + (avg_retrieval * 0.80)
+
+        else:
+            confidence = (avg_cohere * 0.70) + (avg_retrieval * 0.30)  # ← changed
+    else:
+        confidence = (avg_cohere * 0.70) + (avg_retrieval * 0.30)  # ← changed
+
     confidence = round(min(confidence, 1.0), 3)
 
     print(f"Confidence: {confidence} "
-          f"(Cohere: {cohere_score:.3f}, "
-          f"Retrieval: {retrieval_score:.3f})")
-
+          f"(Avg Cohere: {avg_cohere:.3f}, "
+          f"Avg Retrieval: {avg_retrieval:.3f})")
     return confidence
-
 
 # ════════════════════════════════════════════════════════════
 # TEST
