@@ -94,21 +94,65 @@ def hybrid_rerank(query: str,
     """
     Full pipeline:
     1. Merge Pinecone + BM25
-    2. Rerank with Cohere
-    3. Return top_n chunks
+    2. Rerank with Cohere using larger pool
+    3. Balance chunks across regulations
+    4. Return top_n chunks
     """
     # Step 1 — Merge
     merged = merge_results(pinecone_chunks, bm25_chunks)
-
+ 
     if not merged:
         print("No chunks found for reranking!")
         return []
-
-    # Step 2 — Rerank
-    reranked = rerank(query, merged, top_n)
-
-    return reranked
-
+ 
+    # Step 2 — Rerank with larger pool for better balancing
+    pool_size    = min(len(merged), top_n * 3)
+    reranked_pool = rerank(query, merged, pool_size)
+ 
+    if not reranked_pool:
+        return []
+ 
+    # Step 3 — Balance across regulations from larger pool
+    regulations_in_chunks = set(
+        c.get("regulation", "")
+        for c in reranked_pool
+        if c.get("regulation")  # skip empty
+    )
+ 
+    if len(regulations_in_chunks) > 1:
+        balanced   = []
+        reg_counts = {}
+        added_ids  = set()
+ 
+        # Calculate minimum per regulation
+        min_per_reg = max(1, top_n // len(regulations_in_chunks))
+ 
+        # First pass — take min_per_reg from each regulation
+        for reg in regulations_in_chunks:
+            count = 0
+            for chunk in reranked_pool:
+                if count >= min_per_reg:
+                    break
+                if (chunk.get("regulation") == reg and
+                        chunk["id"] not in added_ids):
+                    balanced.append(chunk)
+                    added_ids.add(chunk["id"])
+                    count += 1
+            reg_counts[reg] = count
+ 
+        # Fill remaining slots with best remaining chunks
+        for chunk in reranked_pool:
+            if len(balanced) >= top_n:
+                break
+            if chunk["id"] not in added_ids:
+                balanced.append(chunk)
+                added_ids.add(chunk["id"])
+ 
+        print(f"Balanced reranking: {dict(reg_counts)}")
+        return balanced[:top_n]
+ 
+    # Single regulation — return top_n directly
+    return reranked_pool[:top_n]
 
 # ── Calculate confidence from Cohere score ───────────────────
 def calculate_confidence(reranked_chunks: list,
@@ -160,12 +204,32 @@ def calculate_confidence(reranked_chunks: list,
             confidence = (avg_cohere * 0.70) + (avg_retrieval * 0.30)  # ← changed
     else:
         confidence = (avg_cohere * 0.70) + (avg_retrieval * 0.30)  # ← changed
+    
+    # ── Citation bonus ───────────────────────────────────────
+    # Count unique citations in top chunks
+    citations = set()
+    for c in top_chunks:
+        citation = c.get("citation", "") or c.get("metadata", {}).get("citation", "")
+        if citation:
+            citations.add(citation)
+    citation_count = len(citations)
 
-    confidence = round(min(confidence, 1.0), 3)
+    if citation_count >= 3:
+        confidence += 0.08
+        print(f"Citation bonus: +0.08 ({citation_count} citations)")
+    elif citation_count == 2:
+        confidence += 0.05
+        print(f"Citation bonus: +0.05 ({citation_count} citations)")
+    elif citation_count == 1:
+        confidence += 0.02
+        print(f"Citation bonus: +0.02 ({citation_count} citations)")
+
+    confidence = round(min(confidence, 0.95), 3)
 
     print(f"Confidence: {confidence} "
           f"(Avg Cohere: {avg_cohere:.3f}, "
-          f"Avg Retrieval: {avg_retrieval:.3f})")
+          f"Avg Retrieval: {avg_retrieval:.3f}, "
+          f"Citations: {citation_count})")
     return confidence
 
 # ════════════════════════════════════════════════════════════

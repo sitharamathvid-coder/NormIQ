@@ -40,25 +40,30 @@ app.add_middleware(
 # ════════════════════════════════════════════════════════════
 
 class QueryRequest(BaseModel):
-    question:  str
-    user_id:   Optional[str] = "anonymous"
-    role:      Optional[str] = "nurse"
-    location:  Optional[str] = "US"
+    question:            str
+    user_id:             Optional[str]  = "anonymous"
+    role:                Optional[str]  = "nurse"
+    location:            Optional[str]  = "US"
+    skip_mcq:            Optional[bool] = False
+    forced_regulations:  Optional[list] = []
 
 
 class QueryResponse(BaseModel):
-    status:           str
-    summary:          str
-    answer:           str
-    citations:        list
-    confidence:       float
-    regulation:       list
-    ref_id:           Optional[str]
-    conflict:         bool
-    conflict_warning: str
-    message:          str
-    was_cached:       Optional[bool] = False
-
+    status:                   str
+    summary:                  Optional[str]  = ""
+    answer:                   str
+    citations:                list
+    confidence:               float
+    regulation:               list
+    ref_id:                   Optional[str]
+    conflict:                 bool
+    conflict_warning:         str
+    message:                  str
+    was_cached:               Optional[bool] = False
+    needs_clarification_mcq:  Optional[bool] = False
+    mcq_question:             Optional[str]  = ""
+    mcq_options:              Optional[list] = []
+    original_question:        Optional[str]  = ""
 
 class OfficerActionRequest(BaseModel):
     ref_id:         str
@@ -87,21 +92,27 @@ def health():
 def query(request: QueryRequest):
     try:
         result = run_agent(
-            question = request.question,
-            user_id  = request.user_id
+            question           = request.question,
+            user_id            = request.user_id,
+            skip_mcq           = request.skip_mcq,
+            forced_regulations = request.forced_regulations
         )
         return QueryResponse(
-            status           = result["status"],
-            summary          = result.get("summary", ""),
-            answer           = result.get("answer", ""),
-            citations        = result.get("citations", []),
-            confidence       = result.get("confidence", 0.0),
-            regulation       = result.get("regulation", []),
-            ref_id           = result.get("ref_id"),
-            conflict         = result.get("conflict", False),
-            conflict_warning = result.get("conflict_warning", ""),
-            message          = result.get("message", ""),
-            was_cached       = result.get("was_cached", False)
+            status                  = result["status"],
+            summary                 = result.get("summary", ""),
+            answer                  = result.get("answer", ""),
+            citations               = result.get("citations", []),
+            confidence              = result.get("confidence", 0.0),
+            regulation              = result.get("regulation", []),
+            ref_id                  = result.get("ref_id"),
+            conflict                = result.get("conflict", False),
+            conflict_warning        = result.get("conflict_warning", ""),
+            message                 = result.get("message", ""),
+            was_cached              = result.get("was_cached", False),
+            needs_clarification_mcq = result.get("needs_clarification_mcq", False),
+            mcq_question            = result.get("mcq_question", ""),
+            mcq_options             = result.get("mcq_options", []),
+            original_question       = result.get("original_question", "")
         )
     except Exception as e:
         import traceback

@@ -14,6 +14,9 @@ no markdown, no extra text. Just the JSON.
     "keywords": ["key", "legal", "terms"],
     "is_clear": true,
     "clarification_needed": "",
+    "needs_clarification_mcq": false,
+    "mcq_question": "",
+    "mcq_options": [],
     "use_crosswalk": false,
     "explanation": "brief explanation of what was detected"
 }}
@@ -35,28 +38,55 @@ Rules:
 - clarification_needed: question to ask user if is_clear is false
 - use_crosswalk: true only if question needs both HIPAA and NIST together
 - explanation: one sentence summary
+- needs_clarification_mcq: true ONLY when jurisdiction is ambiguous
+  Set true when question involves:
+  * Sharing data between US and EU
+  * International data transfers
+  * Keywords: EU partner, Germany, France, UK, Italy, Spain,
+    international, third country, overseas, foreign country
+  * NEVER true for NIST questions
+  * NEVER true for clear single jurisdiction questions
+
+- mcq_question: clear short question to ask nurse
+  Example: "Where is the patient whose data you want to share?"
+
+- mcq_options: always exactly these 3 options:
+  ["US Patient only — HIPAA applies",
+   "EU Patient only — GDPR applies",
+   "Both US and EU patients — HIPAA and GDPR apply"]
 
 Examples:
 Q: "What is the HIPAA breach notification deadline?"
-A: {{"regulations": ["HIPAA"], "jurisdictions": ["US"], 
+A: {{"regulations": ["HIPAA"], "jurisdictions": ["US"],
     "intent": "lookup", "keywords": ["breach", "notification", "deadline"],
     "is_clear": true, "clarification_needed": "",
+    "needs_clarification_mcq": false,
+    "mcq_question": "", "mcq_options": [],
     "use_crosswalk": false,
     "explanation": "User wants the specific HIPAA breach notification timeframe"}}
 
 Q: "Can we store EU patient data on a US server?"
 A: {{"regulations": ["HIPAA", "GDPR"], "jurisdictions": ["US", "EU"],
-    "intent": "compliance_check", 
+    "intent": "compliance_check",
     "keywords": ["data transfer", "cross border", "storage"],
     "is_clear": true, "clarification_needed": "",
+    "needs_clarification_mcq": true,
+    "mcq_question": "Where are the patients whose data you want to store?",
+    "mcq_options": [
+        "US Patient only — HIPAA applies",
+        "EU Patient only — GDPR applies",
+        "Both US and EU patients — HIPAA and GDPR apply"
+    ],
     "use_crosswalk": false,
-    "explanation": "Cross-border data transfer question involving both laws"}}
+    "explanation": "Cross-border storage — jurisdiction needed"}}
 
 Q: "What technical controls map to HIPAA access control?"
 A: {{"regulations": ["HIPAA", "NIST"], "jurisdictions": ["US", "Global"],
     "intent": "lookup",
     "keywords": ["access control", "technical safeguards"],
     "is_clear": true, "clarification_needed": "",
+    "needs_clarification_mcq": false,
+    "mcq_question": "", "mcq_options": [],
     "use_crosswalk": true,
     "explanation": "User wants HIPAA mapped to NIST technical controls"}}
 
@@ -65,8 +95,34 @@ A: {{"regulations": [], "jurisdictions": [],
     "intent": "lookup", "keywords": [],
     "is_clear": false,
     "clarification_needed": "Could you provide more detail? For example: Can I share patient data with a third party under HIPAA?",
+    "needs_clarification_mcq": false,
+    "mcq_question": "", "mcq_options": [],
     "use_crosswalk": false,
     "explanation": "Question too vague — missing regulation and context"}}
+Q: "Can I share patient data with our EU partner?"
+A: {{"regulations": ["HIPAA", "GDPR"], "jurisdictions": ["US", "EU"],
+    "intent": "compliance_check",
+    "keywords": ["share", "patient data", "EU", "partner"],
+    "is_clear": true, "clarification_needed": "",
+    "needs_clarification_mcq": true,
+    "mcq_question": "Where is the patient whose data you want to share?",
+    "mcq_options": [
+        "US Patient only — HIPAA applies",
+        "EU Patient only — GDPR applies",
+        "Both US and EU patients — HIPAA and GDPR apply"
+    ],
+    "use_crosswalk": false,
+    "explanation": "Cross-border sharing — jurisdiction needed"}}
+
+Q: "What does NIST say about access control?"
+A: {{"regulations": ["NIST"], "jurisdictions": ["Global"],
+    "intent": "lookup",
+    "keywords": ["access control"],
+    "is_clear": true, "clarification_needed": "",
+    "needs_clarification_mcq": false,
+    "mcq_question": "", "mcq_options": [],
+    "use_crosswalk": false,
+    "explanation": "NIST question — no jurisdiction needed"}}
 """
 
 MULTI_QUERY_PROMPT = """

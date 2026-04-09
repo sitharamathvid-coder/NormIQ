@@ -165,15 +165,26 @@ st.markdown("""
  
  
 # ── Session state ────────────────────────────────────────────
+# ── Session state ────────────────────────────────────────────
 if "user_id" not in st.session_state:
     st.session_state.user_id = "nurse_test_001"
- 
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
- 
+
 if "loaded_history" not in st.session_state:
     st.session_state.loaded_history = False
- 
+
+if "mcq_selected" not in st.session_state:
+    st.session_state.mcq_selected = False
+
+if "mcq_clarified" not in st.session_state:
+    st.session_state.mcq_clarified = ""
+
+if "mcq_forced_regulations" not in st.session_state:
+    st.session_state.mcq_forced_regulations = []
+print(f"DEBUG loaded_history: {st.session_state.loaded_history}")
+print(f"DEBUG messages count: {len(st.session_state.messages)}") 
  
 # ── Load chat history on first load ─────────────────────────
 if not st.session_state.loaded_history:
@@ -185,6 +196,7 @@ if not st.session_state.loaded_history:
         if history:
             messages = []
             for h in history:
+                print(f"History row: role={h['role']} status={h.get('status')} ref_id={h.get('ref_id')}")
                 # Skip stale pending messages
                 if (h.get("status") == "answered" and
                     "under expert review" in h.get("message", "")):
@@ -210,6 +222,7 @@ if not st.session_state.loaded_history:
                         )
                         if resp.status_code == 200:
                             data = resp.json()
+                            print(f"Got data — summary: {data.get('summary', 'EMPTY')[:40]}")
                             citations = data.get("citations", [])
                             if isinstance(citations, str):
                                 import json as _json
@@ -222,13 +235,16 @@ if not st.session_state.loaded_history:
                                 "citations":        citations,
                                 "confidence":       data.get("confidence", 0),
                                 "conflict_warning": "",
-                                "was_cached":       data.get("was_cached", False)
+                                "was_cached":       data.get("was_cached", False),
+                                "is_rewritten":     data.get("officer_action") == "rewritten",
+                                "officer_action":   data.get("officer_action", "")
                             }
+                            print(f"Result set: {msg['result']['summary'][:40]}")
                     except Exception:
                         pass
 
                 messages.append(msg)
-
+                print(f"Appended msg — result: {msg.get('result') is not None}")
             st.session_state.messages = messages
         st.session_state.loaded_history = True
     except Exception:
@@ -269,6 +285,9 @@ def check_pending_updates():
                             except Exception:
                                 citations = []
 
+                        # Check if rewritten or approved
+                        is_rewritten = data.get("officer_action") == "rewritten"
+
                         st.session_state.messages[i] = {
                             "role":    "bot",
                             "content": final_answer,
@@ -277,9 +296,11 @@ def check_pending_updates():
                             "result":  {
                                 "summary":          data.get("summary", ""),
                                 "citations":        citations,
-                                "confidence": data.get("confidence", 0),
+                                "confidence":       data.get("confidence", 0),
                                 "conflict_warning": "",
-                                "was_cached":       False
+                                "was_cached":       False,
+                                "is_rewritten":     is_rewritten,
+                                "officer_action":   data.get("officer_action", "")
                             }
                         }
                         updated = True
@@ -296,7 +317,53 @@ if has_pending:
     updated = check_pending_updates()
     if updated:
         st.rerun()
- 
+ # ── Handle MCQ selection ─────────────────────────────────────
+if st.session_state.get("mcq_selected"):
+    st.session_state.mcq_selected = False
+    clarified          = st.session_state.get("mcq_clarified", "")
+    forced_regulations = st.session_state.get("mcq_forced_regulations", [])
+
+    if clarified:
+        with st.spinner("Searching regulations..."):
+            try:
+                resp = requests.post(
+                    f"{API_URL}/query",
+                    json = {
+                        "question":           clarified,
+                        "user_id":            st.session_state.user_id,
+                        "role":               "nurse",
+                        "location":           "US",
+                        "skip_mcq":           True,
+                        "forced_regulations": forced_regulations
+                    },
+                    timeout = 60
+                )
+                r = resp.json()
+
+                if r["status"] == "answered":
+                    msg_status = "answered"
+                elif r["status"] == "pending_review":
+                    msg_status = "pending"
+                else:
+                    msg_status = "answered"
+
+                st.session_state.messages.append({
+                    "role":    "bot",
+                    "content": r.get("message", ""),
+                    "status":  msg_status,
+                    "ref_id":  r.get("ref_id"),
+                    "result":  r
+                })
+                st.session_state.mcq_clarified          = ""
+                st.session_state.mcq_forced_regulations = []
+
+            except Exception as e:
+                st.session_state.messages.append({
+                    "role":    "bot",
+                    "content": f"❌ Error: {str(e)}",
+                    "status":  "answered"
+                })
+    st.rerun()
  
 # ════════════════════════════════════════════════════════════
 # DISPLAY MESSAGES
@@ -314,16 +381,82 @@ def display_message(msg: dict, result: dict = None):
         )
 
     elif role == "bot":
-        if status == "pending":
+
+        # ── MCQ — show radio buttons ─────────────────────────
+        if status == "mcq":
+            st.markdown(
+                f'<div class="chat-message-bot">❓ {content}</div>',
+                unsafe_allow_html=True
+            )
+            options           = msg.get("options", [])
+            original_question = msg.get("original_question", "")
+
+            if options:
+                selection = st.radio(
+                    "Select patient jurisdiction:",
+                    options,
+                    key   = f"mcq_radio_{i}",
+                    index = None
+                )
+
+                if selection:
+                    if st.button(
+                        "Confirm →",
+                        key                 = f"mcq_confirm_{i}",
+                        use_container_width = False
+                    ):
+                        if "Both" in selection or "both" in selection:
+                            clarified          = f"{original_question} under both HIPAA and GDPR"
+                            forced_regulations = ["HIPAA", "GDPR"]
+                        elif "GDPR" in selection or "EU" in selection:
+                            clarified          = f"{original_question} under GDPR for EU patients"
+                            forced_regulations = ["GDPR"]
+                        elif "HIPAA" in selection or "US" in selection:
+                            clarified          = f"{original_question} under HIPAA for US patients"
+                            forced_regulations = ["HIPAA"]
+                        else:
+                            clarified          = f"{original_question} under both HIPAA and GDPR"
+                            forced_regulations = ["HIPAA", "GDPR"]
+
+                        # Mark MCQ as done
+                        st.session_state.messages[i] = {
+                            "role":    "bot",
+                            "content": f"❓ {content}",
+                            "status":  "answered",
+                            "result":  None
+                        }
+
+                        # Add nurse selection
+                        st.session_state.messages.append({
+                            "role":    "nurse",
+                            "content": selection,
+                            "status":  "answered"
+                        })
+
+                        # Store for processing
+                        st.session_state.mcq_selected           = True
+                        st.session_state.mcq_clarified          = clarified
+                        st.session_state.mcq_forced_regulations = forced_regulations
+                        st.rerun()
+
+        # ── Pending review ───────────────────────────────────
+        elif status == "pending":
             st.markdown(
                 f'<div class="chat-message-pending">{content}</div>',
                 unsafe_allow_html=True
             )
+
+        # ── Normal answered message ──────────────────────────
         else:
-            # Debug — remove after testing
-            print(f"DEBUG result keys: {result.keys() if result else 'None'}")
-            print(f"DEBUG summary: {result.get('summary') if result else 'None'}")
-            # Show summary if available
+            # Skip display for converted MCQ messages
+            if result is None and content.startswith("❓"):
+                st.markdown(
+                    f'<div class="chat-message-bot">{content}</div>',
+                    unsafe_allow_html=True
+                )
+                return
+
+            # Show summary + expandable full answer
             if result and result.get("summary"):
                 st.markdown(
                     f'<div class="chat-message-bot">'
@@ -331,17 +464,30 @@ def display_message(msg: dict, result: dict = None):
                     f'</div>',
                     unsafe_allow_html=True
                 )
-                # Full answer in expander
                 with st.expander("📖 View full answer"):
                     st.markdown(content)
             else:
-                # No summary — show full answer directly
                 st.markdown(
                     f'<div class="chat-message-bot">{content}</div>',
                     unsafe_allow_html=True
                 )
 
-            
+            # Citations — deduplicated
+            if result and result.get("citations"):
+                seen   = set()
+                unique = []
+                for c in result["citations"]:
+                    key = c.get("citation", "")
+                    if key not in seen:
+                        seen.add(key)
+                        unique.append(c)
+                citation_text = " · ".join([
+                    c['citation'] for c in unique
+                ])
+                st.markdown(
+                    f'<div class="citation-box">📋 {citation_text}</div>',
+                    unsafe_allow_html=True
+                )
 
             # Conflict warning
             if result and result.get("conflict_warning"):
@@ -351,27 +497,39 @@ def display_message(msg: dict, result: dict = None):
                     unsafe_allow_html=True
                 )
 
-            # Confidence
+            # Confidence + cached badge
             if result:
-                conf       = result.get("confidence", 0)
-                conf_class = "confidence-high" if conf >= 0.80 \
-                             else "confidence-low"
-                cached     = "⚡ Cached" if result.get("was_cached") \
-                             else ""
-                reviewed   = "✅ Officer Verified" if result.get("was_reviewed") \
-                             else ""
-                st.markdown(
-                    f'<span class="{conf_class}">'
-                    f'Confidence: {conf}</span>'
-                    f'&nbsp;&nbsp;'
-                    f'<span class="cached-badge">{cached}</span>',
-                    unsafe_allow_html=True
-                )
+                is_rewritten   = result.get("is_rewritten", False)
+                officer_action = result.get("officer_action", "")
+                cached         = "⚡ Cached" if result.get("was_cached") else ""
 
+                if is_rewritten or officer_action == "rewritten":
+                    # Rewritten by officer — show badge only
+                    st.markdown(
+                        f'<span style="color:#2dd4bf;font-size:12px">'
+                        f'✏ Rewritten by compliance officer</span>'
+                        f'&nbsp;&nbsp;'
+                        f'<span class="cached-badge">{cached}</span>',
+                        unsafe_allow_html=True
+                    )
+                else:
+                    # Normal — show confidence score
+                    conf       = result.get("confidence", 0)
+                    conf_class = "confidence-high" if conf >= 0.80 \
+                                 else "confidence-low"
+                    st.markdown(
+                        f'<span class="{conf_class}">'
+                        f'Confidence: {conf}</span>'
+                        f'&nbsp;&nbsp;'
+                        f'<span class="cached-badge">{cached}</span>',
+                        unsafe_allow_html=True
+                    )
  
 # ── Display all messages ─────────────────────────────────────
 for i, msg in enumerate(st.session_state.messages):
     result = msg.get("result")
+    if msg.get("role") == "bot" and msg.get("status") == "answered":
+        print(f"LOOP DEBUG: result={result is not None}, summary={result.get('summary') if result else 'NONE'}")
     display_message(msg, result)
  
  
@@ -394,15 +552,16 @@ with st.form("chat_form", clear_on_submit=True):
  
  
 # ── Handle submission ────────────────────────────────────────
+# ── Handle submission ────────────────────────────────────────
 if submitted and question.strip():
- 
+
     # Add nurse message
     st.session_state.messages.append({
         "role":    "nurse",
         "content": question,
         "status":  "answered"
     })
- 
+
     # Call API
     with st.spinner("Searching regulations..."):
         try:
@@ -417,31 +576,48 @@ if submitted and question.strip():
                 timeout = 60
             )
             result = response.json()
- 
+
             status = result.get("status")
- 
+
             if status == "answered":
-                bot_message = result["message"]
-                msg_status  = "answered"
- 
+                st.session_state.messages.append({
+                    "role":    "bot",
+                    "content": result["message"],
+                    "status":  "answered",
+                    "ref_id":  result.get("ref_id"),
+                    "result":  result
+                })
+
             elif status == "clarification":
-                bot_message = result["message"]
-                msg_status  = "answered"
- 
+                if result.get("needs_clarification_mcq"):
+                    # Show MCQ radio buttons
+                    st.session_state.messages.append({
+                        "role":              "bot",
+                        "content":           result["mcq_question"],
+                        "status":            "mcq",
+                        "options":           result["mcq_options"],
+                        "original_question": result["original_question"]
+                    })
+                else:
+                    # Regular clarification
+                    st.session_state.messages.append({
+                        "role":    "bot",
+                        "content": result["message"],
+                        "status":  "answered",
+                        "ref_id":  result.get("ref_id"),
+                        "result":  result
+                    })
+
             else:
                 # Pending review
-                bot_message = result["message"]
-                msg_status  = "pending"
- 
-            # Add bot message
-            st.session_state.messages.append({
-                "role":    "bot",
-                "content": bot_message,
-                "status":  msg_status,
-                "ref_id":  result.get("ref_id"),
-                "result":  result
-            })
- 
+                st.session_state.messages.append({
+                    "role":    "bot",
+                    "content": result["message"],
+                    "status":  "pending",
+                    "ref_id":  result.get("ref_id"),
+                    "result":  result
+                })
+
         except requests.exceptions.Timeout:
             st.session_state.messages.append({
                 "role":    "bot",
@@ -454,9 +630,8 @@ if submitted and question.strip():
                 "content": f"❌ Error: {str(e)}",
                 "status":  "answered"
             })
- 
+
     st.rerun()
- 
  
 # ════════════════════════════════════════════════════════════
 # SIDEBAR

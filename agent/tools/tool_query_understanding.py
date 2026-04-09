@@ -93,6 +93,10 @@ if __name__ == "__main__":
         "What technical controls map to HIPAA access control?",
         "Can I share?",
         "Compare HIPAA and GDPR breach notification rules",
+        "Can I share patient data with our EU partner?",
+        "Can we store patient records on a server in Germany?",
+        "What does NIST say about access control?",
+        "Can a US hospital send records to a clinic in France?",
     ]
 
     for q in tests:
@@ -101,9 +105,10 @@ if __name__ == "__main__":
         print(f"   Regulations:  {result['regulations']}")
         print(f"   Intent:       {result['intent']}")
         print(f"   Is clear:     {result['is_clear']}")
-        print(f"   Use crosswalk:{result['use_crosswalk']}")
-        if not result['is_clear']:
-            print(f"   Ask nurse:    {result['clarification_needed']}")
+        print(f"   Needs MCQ:    {result.get('needs_clarification_mcq', False)}")
+        if result.get('needs_clarification_mcq'):
+            print(f"   MCQ Question: {result.get('mcq_question', '')}")
+            print(f"   MCQ Options:  {result.get('mcq_options', [])}")
         print()
 
     print("Query understanding test complete!")

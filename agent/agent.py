@@ -79,7 +79,8 @@ def alert_officer_telegram(ref_id: str, question: str,
         print(f"Telegram alert error: {e}")
  
  
-def run_agent(question: str, user_id: str = "user") -> dict:
+def run_agent(question: str, user_id: str = "user", skip_mcq: bool = False,
+              forced_regulations: list = []) -> dict:
     """
     Main NormIQ Agent
     Orchestrates all 4 tools with guardrails and caching.
@@ -143,9 +144,7 @@ def run_agent(question: str, user_id: str = "user") -> dict:
  
         conflict_check = check_regulation_conflict(cached_regulations)
  
-        chat_history_add(user_id, "nurse", question)
-        chat_history_add(user_id, "bot",
-                        cached["answer"], status="answered")
+        
  
         ref_id = audit_log_create(
             user_id    = user_id,
@@ -161,7 +160,15 @@ def run_agent(question: str, user_id: str = "user") -> dict:
             confidence = cached.get("confidence", 1.0),
             summary    = cached.get("summary", "")
         )
- 
+        # Now save to chat history WITH ref_id
+        chat_history_add(user_id, "nurse", question)
+        chat_history_add(
+            user_id = user_id,
+            role    = "bot",
+            message = cached["answer"],
+            ref_id  = ref_id,        # ← ref_id now available!
+            status  = "answered"
+        )
         return {
             "status":           "answered",
             "summary":          cached.get("summary", ""),
@@ -177,34 +184,87 @@ def run_agent(question: str, user_id: str = "user") -> dict:
         }
  
     # ── STEP 3: Query understanding ──────────────────────────
-    query_info = understand_query(question)
- 
-    if not query_info["is_clear"]:
-        print("Question not clear — asking clarification")
- 
-        chat_history_add(user_id, "nurse", question)
-        chat_history_add(user_id, "bot",
-                        query_info["clarification_needed"])
- 
-        return {
-            "status":           "clarification",
-            "summary":          "",
-            "answer":           "",
-            "citations":        [],
-            "confidence":       0.0,
-            "regulation":       [],
-            "ref_id":           None,
-            "conflict":         False,
-            "conflict_warning": "",
-            "message":          query_info["clarification_needed"]
-        }
- 
-    regulations   = query_info["regulations"]
-    intent        = query_info["intent"]
-    use_crosswalk = query_info["use_crosswalk"]
- 
-    if not regulations:
-        regulations = ["HIPAA"]
+    # ── STEP 3: Query understanding ──────────────────────────
+    if forced_regulations:
+        # Nurse already selected via MCQ — skip query understanding
+        print(f"Skipping query understanding — "
+              f"forced: {forced_regulations}")
+        regulations   = forced_regulations
+        intent        = "compliance_check"
+        use_crosswalk = False
+
+    else:
+        query_info = understand_query(question)
+
+        # ── MCQ needed — jurisdiction ambiguous ──────────────
+        if query_info.get("needs_clarification_mcq") and not skip_mcq:
+            print("MCQ needed — cross-border question detected")
+            chat_history_add(user_id, "nurse", question)
+            return {
+                "status":                  "clarification",
+                "summary":                 "",
+                "answer":                  "",
+                "citations":               [],
+                "confidence":              0.0,
+                "regulation":              [],
+                "ref_id":                  None,
+                "conflict":                False,
+                "conflict_warning":        "",
+                "message":                 query_info["mcq_question"],
+                "needs_clarification_mcq": True,
+                "mcq_question":            query_info["mcq_question"],
+                "mcq_options":             query_info["mcq_options"],
+                "original_question":       question,
+                "was_cached":              False
+            }
+
+        # ── Not clear — ask clarification ────────────────────
+        if not query_info["is_clear"]:
+            print("Question not clear — asking clarification")
+            clarification_msg = (
+                f"❓ I need a bit more detail.\n\n"
+                f"{query_info['clarification_needed']}"
+            )
+            chat_history_add(user_id, "nurse", question)
+            chat_history_add(user_id, "bot", clarification_msg)
+            return {
+                "status":                  "clarification",
+                "summary":                 "",
+                "answer":                  "",
+                "citations":               [],
+                "confidence":              0.0,
+                "regulation":              [],
+                "ref_id":                  None,
+                "conflict":                False,
+                "conflict_warning":        "",
+                "message":                 clarification_msg,
+                "needs_clarification_mcq": False,
+                "mcq_question":            "",
+                "mcq_options":             [],
+                "original_question":       question,
+                "was_cached":              False
+            }
+
+        regulations   = query_info["regulations"]
+        intent        = query_info["intent"]
+        use_crosswalk = query_info["use_crosswalk"]
+
+        # Smart default if no regulation detected
+        if not regulations:
+            q_lower = question.lower()
+            if any(k in q_lower for k in [
+                "nist", "sp 800", "ac-", "au-", "sc-",
+                "ir-", "ra-", "control", "framework"
+            ]):
+                regulations = ["NIST"]
+            elif any(k in q_lower for k in [
+                "gdpr", "eu ", "european", "article",
+                "data subject", "erasure", "dpo"
+            ]):
+                regulations = ["GDPR"]
+            else:
+                regulations = ["HIPAA"]
+            print(f"Auto-detected: {regulations}")
  
     # ── STEP 4: Hybrid search ────────────────────────────────
     search_result = hybrid_search(
@@ -382,17 +442,21 @@ def run_agent(question: str, user_id: str = "user") -> dict:
     print(f"  Ref ID:     {ref_id}")
  
     return {
-        "status":           status,
-        "summary":          summary,
-        "answer":           answer,
-        "citations":        citations,
-        "confidence":       confidence,
-        "regulation":       regulations,
-        "ref_id":           ref_id,
-        "conflict":         has_conflict,
-        "conflict_warning": conflict_warning,
-        "message":          display_message,
-        "was_cached":       False
+        "status":                  status,
+        "summary":                 summary,
+        "answer":                  answer,
+        "citations":               citations,
+        "confidence":              confidence,
+        "regulation":              regulations,
+        "ref_id":                  ref_id,
+        "conflict":                has_conflict,
+        "conflict_warning":        conflict_warning,
+        "message":                 display_message,
+        "was_cached":              False,
+        "needs_clarification_mcq": False,
+        "mcq_question":            "",
+        "mcq_options":             [],
+        "original_question":       question
     }
  
  
