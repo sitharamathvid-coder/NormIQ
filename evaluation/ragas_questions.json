@@ -1,0 +1,482 @@
+[
+  {
+    "id": "H01",
+    "category": "HIPAA",
+    "question": "What is the HIPAA breach notification deadline?",
+    "ground_truth": "Under HIPAA 45 CFR §164.404, covered entities must notify affected individuals without unreasonable delay and no later than 60 calendar days after discovery of a breach of unsecured protected health information."
+  },
+  {
+    "id": "H02",
+    "category": "HIPAA",
+    "question": "What are the HIPAA physical safeguard requirements?",
+    "ground_truth": "Under HIPAA 45 CFR §164.310, covered entities must implement facility access controls, workstation use policies, workstation security, and device and media controls to protect ePHI."
+  },
+  {
+    "id": "H03",
+    "category": "HIPAA",
+    "question": "What is the fine for a HIPAA violation?",
+    "ground_truth": "Under 45 CFR §160.404, HIPAA fines range from $100 to $50,000 per violation with a maximum of $1,500,000 per year. Four tiers apply based on culpability: did not know, reasonable cause, willful neglect corrected, and willful neglect not corrected."
+  },
+  {
+    "id": "H04",
+    "category": "HIPAA",
+    "question": "What are HIPAA requirements for business associate agreements?",
+    "ground_truth": "Under HIPAA 45 CFR §164.504(e), covered entities must have a written business associate agreement requiring the associate to safeguard PHI, report breaches, and ensure subcontractors comply with the same obligations."
+  },
+  {
+    "id": "H05",
+    "category": "HIPAA",
+    "question": "What does HIPAA say about minimum necessary standard?",
+    "ground_truth": "Under HIPAA 45 CFR §164.502(b), covered entities must make reasonable efforts to limit use and disclosure of PHI to the minimum necessary to accomplish the intended purpose."
+  },
+  {
+    "id": "H06",
+    "category": "HIPAA",
+    "question": "When is authorization required under HIPAA?",
+    "ground_truth": "Under HIPAA 45 CFR §164.508, a covered entity may not use or disclose PHI without valid written authorization except where otherwise permitted. Authorization is specifically required for psychotherapy notes, marketing, and sale of PHI."
+  },
+  {
+    "id": "H07",
+    "category": "HIPAA",
+    "question": "What are HIPAA administrative safeguard requirements?",
+    "ground_truth": "Under HIPAA 45 CFR §164.308, covered entities must implement a security management process, assign security responsibility, maintain workforce security, manage information access, conduct training, and establish contingency plans."
+  },
+  {
+    "id": "H08",
+    "category": "HIPAA",
+    "question": "What are HIPAA technical safeguard requirements?",
+    "ground_truth": "Under HIPAA 45 CFR §164.312, covered entities must implement access controls, audit controls, integrity controls, and transmission security to protect ePHI in electronic information systems."
+  },
+  {
+    "id": "H09",
+    "category": "HIPAA",
+    "question": "What are patient rights under HIPAA?",
+    "ground_truth": "Under HIPAA, patients have the right to access their PHI (§164.524), request amendments (§164.526), receive an accounting of disclosures (§164.528), request restrictions on uses (§164.522), and receive a notice of privacy practices (§164.520)."
+  },
+  {
+    "id": "H10",
+    "category": "HIPAA",
+    "question": "What is the HIPAA privacy rule notice of privacy practices requirement?",
+    "ground_truth": "Under HIPAA 45 CFR §164.520, covered entities must provide patients with a notice of privacy practices describing how PHI may be used and disclosed, patient rights, and the covered entity duties to protect PHI."
+  },
+  {
+    "id": "H11",
+    "category": "HIPAA",
+    "question": "What does HIPAA say about encryption of electronic PHI?",
+    "ground_truth": "Under HIPAA 45 CFR §164.312(a)(2)(iv) and §164.312(e)(2)(ii), encryption and decryption of ePHI is an addressable implementation specification. Covered entities must assess whether encryption is reasonable and appropriate."
+  },
+  {
+    "id": "H12",
+    "category": "HIPAA",
+    "question": "What are HIPAA requirements for workforce training?",
+    "ground_truth": "Under HIPAA 45 CFR §164.308(a)(5), covered entities must implement security awareness and training programs for all workforce members including protection from malicious software, log-in monitoring, and password management."
+  },
+  {
+    "id": "H13",
+    "category": "HIPAA",
+    "question": "What does HIPAA require for disposal of PHI?",
+    "ground_truth": "Under HIPAA 45 CFR §164.310(d), covered entities must implement policies for final disposal of ePHI and the hardware or electronic media on which it is stored, including removal of ePHI before reuse."
+  },
+  {
+    "id": "H14",
+    "category": "HIPAA",
+    "question": "What is the HIPAA right of access for patients?",
+    "ground_truth": "Under HIPAA 45 CFR §164.524, individuals have the right to inspect and obtain a copy of their PHI maintained in a designated record set. The covered entity must act on the request within 30 days."
+  },
+  {
+    "id": "H15",
+    "category": "HIPAA",
+    "question": "What are HIPAA requirements for contingency planning?",
+    "ground_truth": "Under HIPAA 45 CFR §164.308(a)(7), covered entities must establish data backup plans, disaster recovery plans, emergency mode operation plans, testing and revision procedures, and applications and data criticality analysis."
+  },
+  {
+    "id": "H16",
+    "category": "HIPAA",
+    "question": "What does HIPAA say about disclosures to public health authorities?",
+    "ground_truth": "Under HIPAA 45 CFR §164.512(b), covered entities may disclose PHI to public health authorities authorized by law to collect or receive information for preventing or controlling disease, injury, or disability without patient authorization."
+  },
+  {
+    "id": "H17",
+    "category": "HIPAA",
+    "question": "What are the HIPAA requirements for audit controls?",
+    "ground_truth": "Under HIPAA 45 CFR §164.312(b), covered entities must implement hardware, software, and procedural mechanisms that record and examine activity in information systems that contain or use ePHI."
+  },
+  {
+    "id": "H18",
+    "category": "HIPAA",
+    "question": "What is the HIPAA security rule risk analysis requirement?",
+    "ground_truth": "Under HIPAA 45 CFR §164.308(a)(1), covered entities must conduct an accurate and thorough assessment of the potential risks and vulnerabilities to the confidentiality, integrity, and availability of ePHI held by the covered entity."
+  },
+  {
+    "id": "H19",
+    "category": "HIPAA",
+    "question": "What does HIPAA require for transmission security of ePHI?",
+    "ground_truth": "Under HIPAA 45 CFR §164.312(e)(1), covered entities must implement technical security measures to guard against unauthorized access to ePHI transmitted over electronic communications networks including encryption."
+  },
+  {
+    "id": "H20",
+    "category": "HIPAA",
+    "question": "What are the HIPAA requirements for unique user identification?",
+    "ground_truth": "Under HIPAA 45 CFR §164.312(a)(2)(i), covered entities must assign a unique name and number to each user for identifying and tracking user identity in systems that contain ePHI. This is a required implementation specification."
+  },
+  {
+    "id": "G01",
+    "category": "GDPR",
+    "question": "What are the lawful bases for processing personal data under GDPR?",
+    "ground_truth": "Under GDPR Article 6(1), processing is lawful only if one of six bases applies: consent (6(1)(a)), contract performance (6(1)(b)), legal obligation (6(1)(c)), vital interests (6(1)(d)), public task (6(1)(e)), or legitimate interests (6(1)(f))."
+  },
+  {
+    "id": "G02",
+    "category": "GDPR",
+    "question": "What does GDPR require for breach notification to supervisory authority?",
+    "ground_truth": "Under GDPR Article 33(1), the controller must notify the supervisory authority of a personal data breach without undue delay and where feasible not later than 72 hours after becoming aware of it. If delayed, reasons must be provided."
+  },
+  {
+    "id": "G03",
+    "category": "GDPR",
+    "question": "What is the GDPR right to erasure?",
+    "ground_truth": "Under GDPR Article 17(1), data subjects have the right to obtain erasure of personal data without undue delay when data is no longer necessary, consent is withdrawn, the data subject objects, or data has been unlawfully processed."
+  },
+  {
+    "id": "G04",
+    "category": "GDPR",
+    "question": "Can a patient withdraw consent under GDPR?",
+    "ground_truth": "Under GDPR Article 7(3), data subjects have the right to withdraw consent at any time. Withdrawal must be as easy as giving consent. Withdrawal does not affect lawfulness of prior processing. Data subjects must be informed of this right before giving consent under Article 13(2)."
+  },
+  {
+    "id": "G05",
+    "category": "GDPR",
+    "question": "What does GDPR require for data transfers to third countries?",
+    "ground_truth": "Under GDPR Article 44, transfers to third countries may only occur with adequate protection. Under Article 46(1), appropriate safeguards such as standard contractual clauses may be used in the absence of an adequacy decision under Article 45."
+  },
+  {
+    "id": "G06",
+    "category": "GDPR",
+    "question": "What are the GDPR principles for processing personal data?",
+    "ground_truth": "Under GDPR Article 5(1), personal data must be processed lawfully, fairly and transparently (5(1)(a)), collected for specified purposes (5(1)(b)), limited to what is necessary (5(1)(c)), accurate (5(1)(d)), stored no longer than necessary (5(1)(e)), and processed securely (5(1)(f))."
+  },
+  {
+    "id": "G07",
+    "category": "GDPR",
+    "question": "What is the GDPR right of access for data subjects?",
+    "ground_truth": "Under GDPR Article 15(1), data subjects have the right to obtain confirmation of whether personal data is being processed, access to that data, and information about purposes, categories, recipients, retention periods, and their rights."
+  },
+  {
+    "id": "G08",
+    "category": "GDPR",
+    "question": "When is a Data Protection Impact Assessment required under GDPR?",
+    "ground_truth": "Under GDPR Article 35(1), a DPIA is required where processing is likely to result in high risk to individuals. Article 35(3) specifies mandatory cases including systematic profiling, large-scale processing of special categories, and systematic monitoring of publicly accessible areas."
+  },
+  {
+    "id": "G09",
+    "category": "GDPR",
+    "question": "What does GDPR say about processing special categories of data?",
+    "ground_truth": "Under GDPR Article 9(1), processing of special categories including health data, genetic data, and biometric data is prohibited unless one of the exceptions in Article 9(2) applies such as explicit consent or necessity for healthcare purposes."
+  },
+  {
+    "id": "G10",
+    "category": "GDPR",
+    "question": "What is the GDPR right to data portability?",
+    "ground_truth": "Under GDPR Article 20(1), data subjects have the right to receive their personal data in a structured, commonly used and machine-readable format and to transmit that data to another controller where processing is based on consent or contract."
+  },
+  {
+    "id": "G11",
+    "category": "GDPR",
+    "question": "What are the GDPR requirements for consent?",
+    "ground_truth": "Under GDPR Article 7, consent must be freely given, specific, informed, and unambiguous. The controller must demonstrate consent was given. Consent must be as easy to withdraw as to give. Consent cannot be bundled as a condition of service."
+  },
+  {
+    "id": "G12",
+    "category": "GDPR",
+    "question": "What does GDPR require for notification to data subjects after a breach?",
+    "ground_truth": "Under GDPR Article 34(1), when a breach is likely to result in high risk to data subjects, the controller must notify affected individuals without undue delay describing the nature of the breach, likely consequences, and measures taken."
+  },
+  {
+    "id": "G13",
+    "category": "GDPR",
+    "question": "What is the role of the Data Protection Officer under GDPR?",
+    "ground_truth": "Under GDPR Article 37, a DPO must be appointed when processing is carried out by a public authority, or involves large-scale systematic monitoring or large-scale processing of special categories. Under Article 39, the DPO must advise on compliance, monitor compliance, and cooperate with supervisory authorities."
+  },
+  {
+    "id": "G14",
+    "category": "GDPR",
+    "question": "What are the GDPR accountability requirements?",
+    "ground_truth": "Under GDPR Article 5(2), the controller is responsible for and must demonstrate compliance with the data protection principles. Article 24 requires implementation of appropriate technical and organisational measures to ensure and demonstrate compliance."
+  },
+  {
+    "id": "G15",
+    "category": "GDPR",
+    "question": "What does GDPR say about data protection by design?",
+    "ground_truth": "Under GDPR Article 25(1), controllers must implement data protection by design by implementing appropriate technical and organisational measures to integrate data protection principles into processing activities from the outset."
+  },
+  {
+    "id": "G16",
+    "category": "GDPR",
+    "question": "What are GDPR requirements for records of processing activities?",
+    "ground_truth": "Under GDPR Article 30(1), controllers must maintain records of processing activities including purposes, categories of data subjects and data, recipients, transfers, retention periods, and technical and organisational security measures."
+  },
+  {
+    "id": "G17",
+    "category": "GDPR",
+    "question": "What is the GDPR right to restriction of processing?",
+    "ground_truth": "Under GDPR Article 18(1), data subjects have the right to restrict processing where accuracy is contested, processing is unlawful, data is no longer needed but required for legal claims, or the data subject has objected pending verification of legitimate grounds."
+  },
+  {
+    "id": "G18",
+    "category": "GDPR",
+    "question": "What are GDPR fines and penalties?",
+    "ground_truth": "Under GDPR Article 83, infringements can result in administrative fines up to 10 million euros or 2% of global annual turnover for less serious violations, and up to 20 million euros or 4% of global annual turnover for more serious violations such as breaching basic principles."
+  },
+  {
+    "id": "G19",
+    "category": "GDPR",
+    "question": "What does GDPR require for processing employee health data?",
+    "ground_truth": "Under GDPR Article 9(1), health data is a special category prohibited from processing unless an exception under Article 9(2) applies. Article 9(2)(b) permits processing for employment law obligations. Explicit consent under 9(2)(a) or healthcare purposes under 9(2)(h) may also apply."
+  },
+  {
+    "id": "G20",
+    "category": "GDPR",
+    "question": "What is the GDPR right to object to processing?",
+    "ground_truth": "Under GDPR Article 21(1), data subjects have the right to object at any time to processing based on legitimate interests or public task on grounds relating to their particular situation. The controller must stop processing unless compelling legitimate grounds are demonstrated."
+  },
+  {
+    "id": "GV01",
+    "category": "GDPR_verbatim",
+    "question": "What is the definition of 'personal data' under the GDPR?",
+    "ground_truth": "'Personal data' means any information relating to an identified or identifiable natural person ('data subject'); an identifiable natural person is one who can be identified, directly or indirectly, in particular by reference to an identifier such as a name, an identification number, location data, an online identifier or to one or more factors specific to the physical, physiological, genetic, mental, economic, cultural or social identity of that natural person."
+  },
+  {
+    "id": "GV02",
+    "category": "GDPR_verbatim",
+    "question": "How does the GDPR define 'consent' of the data subject?",
+    "ground_truth": "'Consent' of the data subject means any freely given, specific, informed and unambiguous indication of the data subject's wishes by which he or she, by a statement or by a clear affirmative action, signifies agreement to the processing of personal data relating to him or her."
+  },
+  {
+    "id": "GV03",
+    "category": "GDPR_verbatim",
+    "question": "What is the definition of a 'personal data breach' under the GDPR?",
+    "ground_truth": "'Personal data breach' means a breach of security leading to the accidental or unlawful destruction, loss, alteration, unauthorised disclosure of, or access to, personal data transmitted, stored or otherwise processed."
+  },
+  {
+    "id": "GV04",
+    "category": "GDPR_verbatim",
+    "question": "What are the six lawful bases for processing personal data under Article 6 of the GDPR?",
+    "ground_truth": "Processing shall be lawful only if and to the extent that at least one of the following applies: (a) the data subject has given consent; (b) processing is necessary for the performance of a contract; (c) processing is necessary for compliance with a legal obligation to which the controller is subject; (d) processing is necessary in order to protect the vital interests of the data subject or of another natural person; (e) processing is necessary for the performance of a task carried out in the public interest or in the exercise of official authority vested in the controller; (f) processing is necessary for the purposes of the legitimate interests pursued by the controller or by a third party, except where such interests are overridden by the interests or fundamental rights and freedoms of the data subject."
+  },
+  {
+    "id": "GV05",
+    "category": "GDPR_verbatim",
+    "question": "What are the core principles relating to the processing of personal data under Article 5 of the GDPR?",
+    "ground_truth": "Personal data shall be: processed lawfully, fairly and in a transparent manner ('lawfulness, fairness and transparency'); collected for specified, explicit and legitimate purposes ('purpose limitation'); adequate, relevant and limited to what is necessary ('data minimisation'); accurate and kept up to date ('accuracy'); kept in a form which permits identification for no longer than is necessary ('storage limitation'); and processed in a manner that ensures appropriate security ('integrity and confidentiality')."
+  },
+  {
+    "id": "GV06",
+    "category": "GDPR_verbatim",
+    "question": "Who bears the burden of demonstrating compliance with data processing principles under Article 5?",
+    "ground_truth": "The controller shall be responsible for, and be able to demonstrate compliance with, paragraph 1 ('accountability')."
+  },
+  {
+    "id": "GV07",
+    "category": "GDPR_verbatim",
+    "question": "Under what conditions may a data subject withdraw consent, and what effect does withdrawal have on prior processing?",
+    "ground_truth": "The data subject shall have the right to withdraw his or her consent at any time. The withdrawal of consent shall not affect the lawfulness of processing based on consent before its withdrawal. Prior to giving consent, the data subject shall be informed thereof. It shall be as easy to withdraw as to give consent."
+  },
+  {
+    "id": "GV08",
+    "category": "GDPR_verbatim",
+    "question": "What is the territorial scope of the GDPR for controllers or processors not established in the Union?",
+    "ground_truth": "This Regulation applies to the processing of personal data of data subjects who are in the Union by a controller or processor not established in the Union, where the processing activities are related to the offering of goods or services, irrespective of whether a payment of the data subject is required, to such data subjects in the Union; or the monitoring of their behaviour as far as their behaviour takes place within the Union."
+  },
+  {
+    "id": "GV09",
+    "category": "GDPR_verbatim",
+    "question": "What obligations does Article 25 impose on controllers regarding data protection by design and by default?",
+    "ground_truth": "The controller shall implement appropriate technical and organisational measures, such as pseudonymisation, which are designed to implement data-protection principles, such as data minimisation, in an effective manner. Additionally, by default, only personal data which are necessary for each specific purpose of the processing are processed. That obligation applies to the amount of personal data collected, the extent of their processing, the period of their storage and their accessibility."
+  },
+  {
+    "id": "GV10",
+    "category": "GDPR_verbatim",
+    "question": "What must a contract between a controller and processor stipulate under Article 28?",
+    "ground_truth": "Processing by a processor shall be governed by a contract or other legal act under Union or Member State law, that is binding on the processor with regard to the controller and that sets out the subject-matter and duration of the processing, the nature and purpose of the processing, the type of personal data and categories of data subjects and the obligations and rights of the controller. In particular, the contract shall stipulate that the processor processes the personal data only on documented instructions from the controller and ensures that persons authorised to process the personal data have committed themselves to confidentiality."
+  },
+  {
+    "id": "GV11",
+    "category": "GDPR_verbatim",
+    "question": "Can a processor engage another sub-processor without authorisation from the controller?",
+    "ground_truth": "The processor shall not engage another processor without prior specific or general written authorisation of the controller. In the case of general written authorisation, the processor shall inform the controller of any intended changes concerning the addition or replacement of other processors, thereby giving the controller the opportunity to object to such changes."
+  },
+  {
+    "id": "GV12",
+    "category": "GDPR_verbatim",
+    "question": "What are the responsibilities of joint controllers under Article 26 of the GDPR?",
+    "ground_truth": "Where two or more controllers jointly determine the purposes and means of processing, they shall be joint controllers. They shall in a transparent manner determine their respective responsibilities for compliance with the obligations under this Regulation, in particular as regards the exercising of the rights of the data subject and their respective duties to provide the required information, by means of an arrangement between them. Irrespective of the terms of the arrangement, the data subject may exercise his or her rights under this Regulation in respect of and against each of the controllers."
+  },
+  {
+    "id": "GV13",
+    "category": "GDPR_verbatim",
+    "question": "Under Article 27, when is a controller or processor not established in the Union required to designate a representative?",
+    "ground_truth": "Where Article 3(2) applies, the controller or the processor shall designate in writing a representative in the Union. This obligation does not apply to processing which is occasional, does not include on a large scale processing of special categories of data, and is unlikely to result in a risk to the rights and freedoms of natural persons; or to a public authority or body."
+  },
+  {
+    "id": "GV14",
+    "category": "GDPR_verbatim",
+    "question": "What is the definition of 'pseudonymisation' under the GDPR?",
+    "ground_truth": "'Pseudonymisation' means the processing of personal data in such a manner that the personal data can no longer be attributed to a specific data subject without the use of additional information, provided that such additional information is kept separately and is subject to technical and organisational measures to ensure that the personal data are not attributed to an identified or identifiable natural person."
+  },
+  {
+    "id": "GV15",
+    "category": "GDPR_verbatim",
+    "question": "What is the maximum validity period for a GDPR certification issued to a controller or processor?",
+    "ground_truth": "Certification shall be issued to a controller or processor for a maximum period of three years and may be renewed, under the same conditions, provided that the relevant criteria continue to be met. Certification shall be withdrawn by the certification bodies or by the competent supervisory authority where the criteria for the certification are not or are no longer met."
+  },
+  {
+    "id": "GV16",
+    "category": "GDPR_verbatim",
+    "question": "Does obtaining a GDPR certification reduce a controller's or processor's responsibility for compliance?",
+    "ground_truth": "A certification pursuant to this Article does not reduce the responsibility of the controller or the processor for compliance with this Regulation and is without prejudice to the tasks and powers of the supervisory authorities which are competent pursuant to Article 55 or 56."
+  },
+  {
+    "id": "GV17",
+    "category": "GDPR_verbatim",
+    "question": "What are the conditions under which a body may be accredited to monitor compliance with a code of conduct under Article 41?",
+    "ground_truth": "A body may be accredited to monitor compliance with a code of conduct where that body has: demonstrated its independence and expertise in relation to the subject-matter of the code; established procedures to assess the eligibility of controllers and processors and to monitor their compliance; established procedures and structures to handle complaints about infringements of the code and to make those procedures transparent to data subjects and the public; and demonstrated that its tasks and duties do not result in a conflict of interests."
+  },
+  {
+    "id": "GV18",
+    "category": "GDPR_verbatim",
+    "question": "What obligation does the controller have regarding demonstrating that consent was obtained from the data subject?",
+    "ground_truth": "Where processing is based on consent, the controller shall be able to demonstrate that the data subject has consented to processing of his or her personal data."
+  },
+  {
+    "id": "GV19",
+    "category": "GDPR_verbatim",
+    "question": "From what date does the GDPR apply, and when did it enter into force?",
+    "ground_truth": "This Regulation shall enter into force on the twentieth day following that of its publication in the Official Journal of the European Union. It shall apply from 25 May 2018."
+  },
+  {
+    "id": "GV20",
+    "category": "GDPR_verbatim",
+    "question": "What measures must a controller implement under Article 24 to demonstrate compliance with the GDPR?",
+    "ground_truth": "Taking into account the nature, scope, context and purposes of processing as well as the risks of varying likelihood and severity for the rights and freedoms of natural persons, the controller shall implement appropriate technical and organisational measures to ensure and to be able to demonstrate that processing is performed in accordance with this Regulation. Those measures shall be reviewed and updated where necessary. Where proportionate in relation to processing activities, the measures shall include the implementation of appropriate data protection policies by the controller."
+  },
+  {
+    "id": "GM01",
+    "category": "GDPR_medium",
+    "question": "Under GDPR — Under what conditions is processing of a child's personal data lawful when offering information society services directly to a child?",
+    "ground_truth": "Where consent is the legal basis under Article 6(1)(a), processing of a child's personal data in the context of information society services is lawful only if the child is at least 16 years old. Where the child is below 16, processing is lawful only if consent is given or authorised by the holder of parental responsibility over the child. Member States may provide by law for a lower age, provided that such lower age is not below 13 years. The controller must also make reasonable efforts to verify that consent is given or authorised by the holder of parental responsibility, taking into consideration available technology."
+  },
+  {
+    "id": "GM02",
+    "category": "GDPR_medium",
+    "question": "Under GDPR — When is processing of special categories of personal data permitted where the data subject is physically or legally incapable of giving consent?",
+    "ground_truth": "Processing of special categories of personal data — which are otherwise prohibited under Article 9(1) — is permitted without the data subject's explicit consent when the processing is necessary to protect the vital interests of the data subject or of another natural person, and where the data subject is physically or legally incapable of giving consent. This is one of the enumerated exceptions to the general prohibition on processing sensitive data."
+  },
+  {
+    "id": "GM03",
+    "category": "GDPR_medium",
+    "question": "Under GDPR — What obligation does a controller have if it intends to further process personal data for a purpose other than the one for which it was originally collected?",
+    "ground_truth": "Where a controller intends to further process personal data for a purpose other than that for which they were collected, the controller shall provide the data subject — prior to that further processing — with information on that other purpose and with any relevant further information as referred to in Article 13(2). This obligation applies even where the data were originally collected directly from the data subject."
+  },
+  {
+    "id": "GM04",
+    "category": "GDPR_medium",
+    "question": "How does the GDPR limit a controller's ability to condition a contract on consent to data processing that is not necessary for that contract?",
+    "ground_truth": "When assessing whether consent is freely given, utmost account shall be taken of whether the performance of a contract, including the provision of a service, is conditional on consent to the processing of personal data that is not necessary for the performance of that contract. If such conditioning occurs, consent may not be considered freely given, undermining its validity as a lawful basis for processing."
+  },
+  {
+    "id": "GM05",
+    "category": "GDPR_medium",
+    "question": "Under GDPR — Under what conditions may a controller extend the one-month deadline for responding to a data subject's request, and what must the controller do when it does so?",
+    "ground_truth": "The one-month response period for acting on data subject requests under Articles 15 to 22 may be extended by two further months where necessary, taking into account the complexity and number of the requests. When extending the deadline, the controller shall inform the data subject of the extension within one month of receipt of the request, together with the reasons for the delay."
+  },
+  {
+    "id": "GM06",
+    "category": "GDPR_medium",
+    "question": "Under GDPR — What obligations does a controller have when it decides not to act on a data subject's request?",
+    "ground_truth": "If the controller does not take action on the request of the data subject, the controller shall inform the data subject without delay and at the latest within one month of receipt of the request of: (a) the reasons for not taking action, and (b) the possibility of lodging a complaint with a supervisory authority and seeking a judicial remedy."
+  },
+  {
+    "id": "GM07",
+    "category": "GDPR_medium",
+    "question": "Under GDPR — When may a controller charge a fee or refuse to act on a data subject's request, and who bears the burden of proof in such cases?",
+    "ground_truth": "Where requests from a data subject are manifestly unfounded or excessive, in particular because of their repetitive character, the controller may either charge a reasonable fee taking into account the administrative costs, or refuse to act on the request. The controller shall bear the burden of demonstrating the manifestly unfounded or excessive character of the request."
+  },
+  {
+    "id": "GM08",
+    "category": "GDPR_medium",
+    "question": "Under GDPR — Under what conditions does the right to erasure ('right to be forgotten') not apply, and what specific exceptions override that right?",
+    "ground_truth": "The right to erasure under Article 17(1) and (2) does not apply to the extent that processing is necessary: for exercising the right of freedom of expression and information; for compliance with a legal obligation under Union or Member State law or for a task carried out in the public interest or official authority; for reasons of public interest in the area of public health; for archiving purposes in the public interest, scientific or historical research, or statistical purposes where erasure would render those purposes impossible or seriously impaired; or for the establishment, exercise or defence of legal claims."
+  },
+  {
+    "id": "GM09",
+    "category": "GDPR_medium",
+    "question": "Under GDPR — What obligations arise for a controller after a restriction of processing has been lifted under Article 18?",
+    "ground_truth": "A data subject who has obtained restriction of processing pursuant to Article 18(1) shall be informed by the controller before the restriction of processing is lifted. This advance notification obligation ensures the data subject can respond or challenge the lifting of the restriction before it takes effect."
+  },
+  {
+    "id": "GM10",
+    "category": "GDPR_medium",
+    "question": "Under GDPR — Under what two cumulative conditions does the right to data portability apply?",
+    "ground_truth": "The right to data portability applies where: (1) the processing is based on consent pursuant to Article 6(1)(a) or Article 9(2)(a), or on a contract pursuant to Article 6(1)(b); and (2) the processing is carried out by automated means. Both conditions must be satisfied simultaneously. The right does not apply to processing necessary for the performance of a task carried out in the public interest or in the exercise of official authority."
+  },
+  {
+    "id": "GM11",
+    "category": "GDPR_medium",
+    "question": "Under GDPR — When the data subject objects to processing based on legitimate interests or public interest grounds, what must the controller demonstrate in order to continue processing?",
+    "ground_truth": "When a data subject objects to processing based on Article 6(1)(e) or (f), including profiling, the controller shall no longer process the personal data unless the controller demonstrates compelling legitimate grounds for the processing which override the interests, rights and freedoms of the data subject, or the processing is for the establishment, exercise or defence of legal claims."
+  },
+  {
+    "id": "GM12",
+    "category": "GDPR_medium",
+    "question": "Under GDPR — What safeguards must a data controller implement when automated decision-making, including profiling, is permitted on the basis of a contract or explicit consent?",
+    "ground_truth": "In the cases where automated decision-making is permitted based on a contract (Article 22(2)(a)) or the data subject's explicit consent (Article 22(2)(c)), the data controller shall implement suitable measures to safeguard the data subject's rights and freedoms and legitimate interests, including at least: the right to obtain human intervention on the part of the controller, the right to express his or her point of view, and the right to contest the decision."
+  },
+  {
+    "id": "GM13",
+    "category": "GDPR_medium",
+    "question": "Under GDPR — Under what conditions is a small enterprise with fewer than 250 employees still required to maintain records of processing activities under Article 30?",
+    "ground_truth": "The exemption from maintaining records of processing activities for enterprises employing fewer than 250 persons does not apply if: (a) the processing is likely to result in a risk to the rights and freedoms of data subjects; (b) the processing is not occasional; or (c) the processing includes special categories of data as referred to in Article 9(1) or personal data relating to criminal convictions and offences referred to in Article 10. If any one of these conditions applies, records must be maintained regardless of the organisation's size."
+  },
+  {
+    "id": "GM14",
+    "category": "GDPR_medium",
+    "question": "Under GDPR — What are the conditions under which a controller is not required to notify a personal data breach directly to affected data subjects, even when high risk is present?",
+    "ground_truth": "Direct communication of a personal data breach to data subjects is not required if any of the following conditions are met: (a) the controller has implemented appropriate technical and organisational protection measures — such as encryption — that render the personal data unintelligible to unauthorised persons; (b) the controller has taken subsequent measures that ensure the high risk to rights and freedoms is no longer likely to materialise; or (c) notification would involve disproportionate effort, in which case a public communication or similar measure must be used instead to inform data subjects in an equally effective manner."
+  },
+  {
+    "id": "GM15",
+    "category": "GDPR_medium",
+    "question": "Under GDPR — In which three specific situations is a Data Protection Impact Assessment (DPIA) always required under Article 35?",
+    "ground_truth": "A DPIA is in particular required in the case of: (1) a systematic and extensive evaluation of personal aspects relating to natural persons based on automated processing, including profiling, on which decisions are based that produce legal effects or similarly significantly affect the natural person; (2) processing on a large scale of special categories of data under Article 9(1) or of personal data relating to criminal convictions and offences under Article 10; or (3) a systematic monitoring of a publicly accessible area on a large scale."
+  },
+  {
+    "id": "GM16",
+    "category": "GDPR_medium",
+    "question": "Under GDPR — What obligation does a controller have to consult the supervisory authority prior to processing, and when is such prior consultation triggered?",
+    "ground_truth": "The controller shall consult the supervisory authority prior to processing where a data protection impact assessment under Article 35 indicates that the processing would result in a high risk in the absence of measures taken by the controller to mitigate the risk. This obligation is triggered when the residual risk remains high even after risk mitigation measures have been considered."
+  },
+  {
+    "id": "GM17",
+    "category": "GDPR_medium",
+    "question": "Under GDPR — Under what three circumstances is an organisation mandatorily required to designate a Data Protection Officer?",
+    "ground_truth": "The controller and processor shall designate a DPO in any case where: (1) the processing is carried out by a public authority or body, except for courts acting in their judicial capacity; (2) the core activities of the controller or processor consist of processing operations which, by their nature, scope and/or purposes, require regular and systematic monitoring of data subjects on a large scale; or (3) the core activities consist of processing on a large scale of special categories of data under Article 9 or personal data relating to criminal convictions and offences under Article 10."
+  },
+  {
+    "id": "GM18",
+    "category": "GDPR_medium",
+    "question": "Under GDPR — What protections does Article 38 afford to a Data Protection Officer regarding independence and reporting structure?",
+    "ground_truth": "Article 38 provides that: the controller and processor shall ensure the DPO does not receive any instructions regarding the exercise of his or her tasks; the DPO shall not be dismissed or penalised for performing those tasks; and the DPO shall directly report to the highest management level of the controller or the processor. These protections collectively ensure the DPO's functional independence."
+  },
+  {
+    "id": "GM19",
+    "category": "GDPR_medium",
+    "question": "Under GDPR — How does Article 11 affect a data subject's ability to exercise rights under Articles 15 to 20 when a controller cannot identify them?",
+    "ground_truth": "If the purposes for which a controller processes personal data do not or no longer require identification of the data subject, the controller is not obliged to maintain, acquire, or process additional information solely to identify the data subject for compliance with the Regulation. Where the controller demonstrates it is not in a position to identify the data subject, it shall inform the data subject accordingly, and Articles 15 to 20 shall not apply — unless the data subject provides additional information enabling identification for the purpose of exercising those rights."
+  },
+  {
+    "id": "GM20",
+    "category": "GDPR_medium",
+    "question": "Under GDPR — What obligation does the controller have when the DPO's advice is sought during a Data Protection Impact Assessment, and how must the DPO's risk-based approach be applied?",
+    "ground_truth": "The controller shall seek the advice of the data protection officer, where designated, when carrying out a data protection impact assessment. In performing his or her tasks — including advising on the DPIA — the DPO shall have due regard to the risk associated with processing operations, taking into account the nature, scope, context and purposes of processing. This means the DPO's involvement is formally required at the DPIA stage, and his or her assessment must be proportionate to the actual processing risks."
+  }
+]

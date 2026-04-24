@@ -37,7 +37,7 @@ def ingest_penalties():
     print("=" * 50)
 
     # Load penalties JSON
-    with open(PENALTIES_JSON) as f:
+    with open(PENALTIES_JSON, encoding="utf-8") as f:
         data = json.load(f)
 
     print(f"Total penalty chunks to upload: {len(data)}")

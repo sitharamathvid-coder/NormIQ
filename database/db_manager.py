@@ -118,7 +118,9 @@ def cache_delete_expired():
 # ════════════════════════════════════════════════════════════
 
 def audit_log_create(user_id: str, question: str,
-                     regulation: str, was_cached: bool = False):
+                     regulation: str = "",
+                     was_cached: bool = False,
+                     response_time: float = 0.0) -> str:
     """Create audit log entry when question is received."""
     conn = get_connection()
     if not conn:
@@ -129,11 +131,11 @@ def audit_log_create(user_id: str, question: str,
         cur.execute("""
             INSERT INTO audit_log
             (ref_id, user_id, question, regulation,
-             was_cached, status, timestamp)
-            VALUES (%s, %s, %s, %s, %s, %s, NOW())
+             was_cached, status, response_time_sec, timestamp)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, NOW())
             RETURNING ref_id
         """, (ref_id, user_id, question, regulation,
-              was_cached, "pending"))
+              was_cached, "pending", response_time))
         conn.commit()
         cur.close()
         conn.close()

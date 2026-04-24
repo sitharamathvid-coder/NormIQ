@@ -71,10 +71,10 @@ class BM25Search:
         print("Building BM25 indexes from scratch...")
  
         # ── HIPAA ────────────────────────────────────────────
-        with open(HIPAA_JSON) as f:
+        with open(HIPAA_JSON, encoding="utf-8") as f:
             hipaa_data = json.load(f)
  
-        with open(PENALTIES_JSON) as f:
+        with open(PENALTIES_JSON, encoding="utf-8") as f:
             penalties_data = json.load(f)
  
         all_hipaa = hipaa_data + penalties_data
@@ -94,30 +94,27 @@ class BM25Search:
             })
  
         # ── GDPR ─────────────────────────────────────────────
-        df      = pd.read_csv(GDPR_CSV)
-        grouped = df.groupby("article")
- 
-        for article_num, group in grouped:
-            texts = []
-            for _, row in group.iterrows():
-                t = str(row["gdpr_text"]).replace("\n", " ").strip()
-                if t and t != "nan":
-                    texts.append(t)
- 
-            combined = " ".join(texts)
-            citation = f"GDPR Article {int(article_num)}"
- 
+        # ── GDPR ─────────────────────────────────────────────
+        with open('data/gdpr_rechunked.json', encoding='utf-8') as f:
+            gdpr_data = json.load(f)
+
+        for chunk in gdpr_data:
+            text     = chunk.get("text", "").replace("\n", " ").strip()
+            citation = chunk.get("citation", "")
+            if not text or text == "nan":
+                continue
+
             self.gdpr_corpus.append({
-                "id":         f"gdpr_article_{int(article_num)}",
-                "text":       combined,
+                "id":         chunk["id"],
+                "text":       text,
                 "citation":   citation,
-                "article":    int(article_num),
+                "article":    chunk["metadata"].get("article", 0),
                 "regulation": "GDPR",
-                "tokens":     tokenise(combined)
+                "tokens":     tokenise(text)
             })
  
         # ── NIST ─────────────────────────────────────────────
-        with open(NIST_JSON) as f:
+        with open(NIST_JSON, encoding="utf-8") as f:
             nist_data = json.load(f)
  
         for chunk in nist_data:

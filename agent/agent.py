@@ -90,6 +90,8 @@ def run_agent(question: str, user_id: str = "user", skip_mcq: bool = False,
     print(f"NormIQ Agent — Processing question from {user_id}")
     print(f"Question: {question[:80]}")
     print("=" * 60)
+    import time
+    start_time = time.time()
  
     # ── STEP 1: Input guardrails ─────────────────────────────
     guard = check_input(question)
@@ -146,11 +148,15 @@ def run_agent(question: str, user_id: str = "user", skip_mcq: bool = False,
  
         
  
+        response_time = round(time.time() - start_time, 2)
+        print(f"Cache response time: {response_time}s")
+
         ref_id = audit_log_create(
-            user_id    = user_id,
-            question   = question,
-            regulation = cached.get("regulation", ""),
-            was_cached = True
+            user_id       = user_id,
+            question      = question,
+            regulation    = cached.get("regulation", ""),
+            was_cached    = True,
+            response_time = response_time
         )
  
         audit_log_update_answer(
@@ -292,6 +298,7 @@ def run_agent(question: str, user_id: str = "user", skip_mcq: bool = False,
         regulations = regulations,
         intent      = intent
     )
+    answer_result["source_chunks"] = chunks
  
     answer           = answer_result["answer"]
     summary          = answer_result.get("summary", "")
@@ -303,7 +310,11 @@ def run_agent(question: str, user_id: str = "user", skip_mcq: bool = False,
     out_guard = check_output(answer, citations)
  
     # ── STEP 8: Conflict detection ───────────────────────────
-    conflict_check = check_regulation_conflict(regulations)
+    conflict_check = check_regulation_conflict(
+        regulations = regulations,
+        question    = question,
+        answer      = answer
+    )
     if conflict_check["conflict"] and not conflict_warning:
         conflict_warning = conflict_check["warning"]
         has_conflict     = True
@@ -352,10 +363,14 @@ def run_agent(question: str, user_id: str = "user", skip_mcq: bool = False,
             pass
  
     # ── STEP 11: Create audit log entry ─────────────────────
+    response_time = round(time.time() - start_time, 2)
+    print(f"Response time: {response_time}s")
+
     ref_id = audit_log_create(
-        user_id    = user_id,
-        question   = question,
-        regulation = ", ".join(regulations)
+        user_id       = user_id,
+        question      = question,
+        regulation    = ", ".join(regulations),
+        response_time = response_time
     )
  
     if confidence >= CONFIDENCE_THRESHOLD:
@@ -456,7 +471,8 @@ def run_agent(question: str, user_id: str = "user", skip_mcq: bool = False,
         "needs_clarification_mcq": False,
         "mcq_question":            "",
         "mcq_options":             [],
-        "original_question":       question
+        "original_question":       question,
+        "source_chunks":  chunks
     }
  
  

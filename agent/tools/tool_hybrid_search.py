@@ -26,7 +26,31 @@ def hybrid_search(query: str,
         re.search(r'\bra-\d+\b', query.lower()) or
         re.search(r'\bau-\d+\b', query.lower())
     )
-
+    # NIST family expansion
+    if regulations == ["NIST"] or "NIST" in regulations:
+        nist_families = {
+            "audit":          ["AU-2", "AU-3", "AU-6", "AU-9", "AU-12"],
+            "backup":         ["CP-9", "CP-10", "CP-2", "CP-4"],
+            "recovery":       ["CP-9", "CP-10", "CP-2"],
+            "access":         ["AC-1", "AC-2", "AC-3", "AC-6"],
+            "incident":       ["IR-1", "IR-4", "IR-5", "IR-6", "IR-8"],
+            "encryption":     ["SC-13", "SC-28", "SC-8"],        # SC-12 removed
+            "transmission":   ["SC-8", "SC-28", "SC-13"],
+            "password":       ["IA-5", "IA-2", "IA-3"],
+            "training":       ["AT-1", "AT-2", "AT-3"],
+            "monitoring":     ["SI-4", "AU-6", "CA-7"],
+            "risk":           ["RA-1", "RA-2", "RA-3", "RA-5"],
+            "physical":       ["PE-2", "PE-3", "PE-6", "PE-8", "PE-16"],
+            "integrity":      ["SI-7", "AU-10", "SC-8"],
+            "authentication": ["IA-2", "IA-3", "IA-8"],
+            "disposal":       ["MP-6", "MP-7", "PE-16"],
+        }
+        q_lower = query.lower()
+        for keyword, controls in nist_families.items():
+            if keyword in q_lower:
+                print(f"NIST family expansion: {keyword} → {controls}")
+                query = query + " " + " ".join(controls)
+                break
     # Step 1 — Pinecone always
     pinecone_chunks = pinecone_search(
         query         = query,

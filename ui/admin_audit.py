@@ -236,15 +236,16 @@ if filtered:
             status_display = status
 
         table_data.append({
-            "Ref ID":      log.get("ref_id", ""),
-            "User":        log.get("user_id", ""),
-            "Question":    log.get("question", "")[:80] + "...",
-            "Regulation":  log.get("regulation", ""),
-            "Confidence":  log.get("confidence", 0),
-            "Status":      status_display,
-            "Cached":      "⚡" if log.get("was_cached") else "",
-            "Officer":     log.get("officer_id", ""),
-            "Time":        str(log.get("timestamp", ""))[:16]
+            "Ref ID":       log.get("ref_id", ""),
+            "User":         log.get("user_id", ""),
+            "Question":     log.get("question", "")[:80] + "...",
+            "Regulation":   log.get("regulation", ""),
+            "Confidence":   log.get("confidence", 0),
+            "Status":       status_display,
+            "Cached":       "⚡" if log.get("was_cached") else "",
+            "Officer":      log.get("officer_id", ""),
+            "Resp Time(s)": log.get("response_time_sec", 0),
+            "Time":         str(log.get("timestamp", ""))[:16]
         })
 
     df = pd.DataFrame(table_data)
@@ -253,7 +254,67 @@ if filtered:
         use_container_width = True,
         hide_index          = True
     )
+    # ── Answer details ───────────────────────────────────────
+    st.divider()
+    st.markdown("### 📋 Answer Details")
+    st.caption("Click to expand each entry")
 
+    for log in filtered:
+        with st.expander(
+            f"{log.get('ref_id')} — "
+            f"{log.get('question', '')[:60]}..."
+        ):
+            col_q, col_a = st.columns(2)
+
+            with col_q:
+                st.markdown("**Question:**")
+                st.info(log.get("question", ""))
+                st.markdown(
+                    f"**User:** `{log.get('user_id', '')}`")
+                st.markdown(
+                    f"**Regulation:** `{log.get('regulation', '')}`")
+                st.markdown(
+                    f"**Confidence:** `{log.get('confidence', 0)}`")
+                st.markdown(
+                    f"**Status:** `{log.get('status', '')}`")
+                st.markdown(
+                    f"**Response Time:** "
+                    f"`{log.get('response_time_sec', 0)}s`")
+                st.markdown(
+                    f"**Cached:** "
+                    f"{'⚡ Yes' if log.get('was_cached') else 'No'}")
+                st.markdown(
+                    f"**Time:** "
+                    f"`{str(log.get('timestamp', ''))[:16]}`")
+
+            with col_a:
+                st.markdown("**AI Draft Answer:**")
+                st.warning(log.get("answer", "No answer yet"))
+
+                if log.get("officer_answer"):
+                    st.markdown("**✏ Officer Answer:**")
+                    st.success(log.get("officer_answer"))
+
+                if log.get("summary"):
+                    st.markdown(
+                        f"**📌 Summary:** {log.get('summary')}")
+
+                if log.get("citations"):
+                    import json as _json
+                    try:
+                        cites = log["citations"]
+                        if isinstance(cites, str):
+                            cites = _json.loads(cites)
+                        st.markdown("**Citations:**")
+                        for c in cites:
+                            st.caption(
+                                f"📋 {c.get('regulation')} — "
+                                f"{c.get('citation')}"
+                            )
+                    except Exception:
+                        pass
+
+    
     # Download button
     csv = df.to_csv(index=False)
     st.download_button(

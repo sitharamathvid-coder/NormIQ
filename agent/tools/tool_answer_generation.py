@@ -144,13 +144,7 @@ def format_answer_for_display(result: dict) -> str:
     if result.get("has_conflict") and result.get("conflict_warning"):
         lines.append(f"\n{result['conflict_warning']}")
 
-    # Citations
-    if result.get("citations"):
-        lines.append("\n📋 Sources cited:")
-        for cite in result["citations"]:
-            lines.append(
-                f"  • {cite.get('citation')}"
-            )
+
 
     return "\n".join(lines)
 

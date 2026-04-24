@@ -8,7 +8,7 @@ load_dotenv()
 OPENAI_API_KEY        = os.getenv("OPENAI_API_KEY")
 EMBEDDING_MODEL       = "text-embedding-3-small"
 EMBEDDING_DIMENSIONS  = 1536
-LLM_MODEL             = "gpt-4o-mini"
+LLM_MODEL             = "gpt-4.1"
 
 # ── Pinecone ─────────────────────────────────────────────────
 PINECONE_API_KEY      = os.getenv("PINECONE_API_KEY")
@@ -23,7 +23,7 @@ NAMESPACE_NIST        = "NIST"
 # ── Cohere ───────────────────────────────────────────────────
 COHERE_API_KEY        = os.getenv("COHERE_API_KEY")
 COHERE_RERANK_MODEL   = "rerank-english-v3.0"
-COHERE_TOP_N          = 6
+COHERE_TOP_N          = 10
 
 # ── Database ─────────────────────────────────────────────────
 DATABASE_URL          = os.getenv("DATABASE_URL")
@@ -47,8 +47,8 @@ BASE_DIR              = pathlib.Path(__file__).parent.parent
 DATA_DIR              = BASE_DIR / "data" / "raw"
 
 NIST_JSON             = DATA_DIR / "nist_rag_ready_final_v4.json"
-HIPAA_JSON            = DATA_DIR / "hipaa_final_rag1.json"
-GDPR_CSV              = DATA_DIR / "gdpr_text.csv"
+HIPAA_JSON            = DATA_DIR / "hipaa_part164_v4.json"
+GDPR_CSV              = DATA_DIR / "gdpr_rechunked.json"
 PENALTIES_JSON        = DATA_DIR / "hipaa_penalties_rag.json"
 CROSSWALK_JSON        = DATA_DIR / "hipaa_nist_crosswalk.json"
 

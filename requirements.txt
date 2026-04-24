@@ -24,7 +24,15 @@ datasets
 # API + UI
 fastapi
 uvicorn
+pydantic
 streamlit
+requests
+
+# Database
+psycopg2-binary
+
+# Bot
+python-telegram-bot
 
 # Monitoring
 langfuse
@@ -34,6 +42,7 @@ python-dotenv
 openai
 pypdf
 pandas
+numpy
 
 # MCP
 mcp

@@ -120,7 +120,28 @@ def check_input(question: str) -> dict:
     cleaned = re.sub(r"<[^>]+>", "", cleaned)       # remove HTML tags
     cleaned = re.sub(r"[;\"\']", "", cleaned)        # remove SQL chars
     cleaned = re.sub(r"\s+", " ", cleaned).strip()   # clean spaces
-
+    # G4a — Creative writing / non-compliance requests
+    CREATIVE_PATTERNS = [
+        "write me a", "write a poem", "write a story",
+        "write an essay", "compose a", "create a poem",
+        "tell me a joke", "sing a song", "make up a",
+        "give me a recipe", "what is the weather",
+        "who is the president", "what restaurant",
+        "sports score", "movie recommendation",
+        "write me an", "generate a poem",
+    ]
+    lower = cleaned.lower()
+    for pattern in CREATIVE_PATTERNS:
+        if pattern in lower:
+            return {
+                "passed":  False,
+                "reason":  "not_compliance",
+                "message": "I can only answer compliance questions about "
+                           "HIPAA, GDPR and NIST regulations.\n"
+                           "I cannot write creative content or answer "
+                           "non-compliance questions.",
+                "cleaned": cleaned
+            }
     # G4 — Not a compliance question
     has_compliance_keyword = any(
         kw in cleaned.lower()
@@ -214,25 +235,67 @@ def check_output(answer: str, citations: list) -> dict:
 # CONFLICT DETECTION
 # ════════════════════════════════════════════════════════════
 
-def check_regulation_conflict(regulations: list) -> dict:
+def check_regulation_conflict(regulations: list,
+                               question: str = "",
+                               answer: str = "") -> dict:
     """
-    Check if answer involves conflicting regulations.
-    GDPR = 72 hours, HIPAA = 60 days for breach notification.
+    Dynamically detect conflicts using LLM
+    instead of hardcoded breach-only warning.
     """
     has_hipaa = "HIPAA" in regulations
     has_gdpr  = "GDPR"  in regulations
 
-    if has_hipaa and has_gdpr:
-        return {
-            "conflict": True,
-            "warning": "⚠ WARNING: GDPR requires notification within "
-                       "72 hours — HIPAA allows 60 days. "
-                       "If EU patients are involved, apply GDPR (stricter)."
-        }
-    return {
-        "conflict": False,
-        "warning": ""
-    }
+    if not (has_hipaa and has_gdpr):
+        return {"conflict": False, "warning": ""}
+
+    # No answer yet — skip conflict check
+    if not answer:
+        return {"conflict": False, "warning": ""}
+
+    try:
+        from openai import OpenAI
+        from config.settings import OPENAI_API_KEY
+        client = OpenAI(api_key=OPENAI_API_KEY)
+
+        prompt = f"""
+You are a compliance expert.
+
+Question: {question}
+Answer: {answer[:500]}
+
+Check if HIPAA and GDPR have CONFLICTING requirements
+for THIS specific question only.
+
+Known conflicts:
+- Breach notification: GDPR=72 hours vs HIPAA=60 days
+- Data erasure: GDPR allows erasure vs HIPAA 6yr retention
+- Consent: GDPR requires explicit consent vs HIPAA more flexible
+- Data minimization: GDPR stricter than HIPAA
+
+If conflict exists for THIS question return:
+{{"conflict": true, "warning": "⚠ WARNING: [specific conflict]"}}
+
+If NO conflict for THIS question return:
+{{"conflict": false, "warning": ""}}
+
+Return ONLY valid JSON.
+"""
+        response = client.chat.completions.create(
+            model       = "gpt-4o-mini",
+            messages    = [{"role": "user", "content": prompt}],
+            temperature = 0.0,
+            max_tokens  = 150
+        )
+
+        import json as _json
+        text   = response.choices[0].message.content.strip()
+        result = _json.loads(text)
+        print(f"Conflict check: {result}")
+        return result
+
+    except Exception as e:
+        print(f"Conflict check error: {e}")
+        return {"conflict": False, "warning": ""}
 
 
 # ════════════════════════════════════════════════════════════

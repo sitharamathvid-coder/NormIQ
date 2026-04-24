@@ -209,7 +209,12 @@ def calculate_confidence(reranked_chunks: list,
     # Count unique citations in top chunks
     citations = set()
     for c in top_chunks:
-        citation = c.get("citation", "") or c.get("metadata", {}).get("citation", "")
+        citation = (
+            c.get("citation", "") or
+            c.get("metadata", {}).get("citation", "") or
+            c.get("control_id", "") or
+            c.get("metadata", {}).get("control_id", "")
+        )
         if citation:
             citations.add(citation)
     citation_count = len(citations)

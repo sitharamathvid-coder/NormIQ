@@ -64,6 +64,7 @@ class QueryResponse(BaseModel):
     mcq_question:             Optional[str]  = ""
     mcq_options:              Optional[list] = []
     original_question:        Optional[str]  = ""
+    source_chunks:           list = []
 
 class OfficerActionRequest(BaseModel):
     ref_id:         str
@@ -112,7 +113,8 @@ def query(request: QueryRequest):
             needs_clarification_mcq = result.get("needs_clarification_mcq", False),
             mcq_question            = result.get("mcq_question", ""),
             mcq_options             = result.get("mcq_options", []),
-            original_question       = result.get("original_question", "")
+            original_question       = result.get("original_question", ""),
+            source_chunks           = result.get("source_chunks", [])
         )
     except Exception as e:
         import traceback

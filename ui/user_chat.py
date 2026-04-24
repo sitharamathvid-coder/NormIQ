@@ -248,6 +248,7 @@ if not st.session_state.loaded_history:
             st.session_state.messages = messages
         st.session_state.loaded_history = True
     except Exception:
+        print(f"ERROR fetching result: {e}")
         st.session_state.loaded_history = True
  
  
@@ -465,7 +466,12 @@ def display_message(msg: dict, result: dict = None):
                     unsafe_allow_html=True
                 )
                 with st.expander("📖 View full answer"):
-                    st.markdown(content)
+                   # Split on bullet pattern and display each as markdown
+                    import re
+                    parts = re.split(r'\s*•\s*', content)
+                    parts = [p.strip() for p in parts if p.strip()]
+                    formatted = "\n\n".join([f"• {p}" for p in parts]) if len(parts) > 1 else content
+                    st.markdown(formatted)
             else:
                 st.markdown(
                     f'<div class="chat-message-bot">{content}</div>',

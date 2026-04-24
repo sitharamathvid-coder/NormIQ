@@ -61,7 +61,8 @@ def vector_search(query: str, namespace: str,
                 "namespace":  namespace,
                 "metadata":   match.metadata,
                 "text":       match.metadata.get("text", ""),
-                "citation":   match.metadata.get("citation", ""),
+                "citation":   match.metadata.get("citation", "") or
+                              match.metadata.get("control_id", ""),
                 "regulation": match.metadata.get("regulation", ""),
             })
         return chunks
